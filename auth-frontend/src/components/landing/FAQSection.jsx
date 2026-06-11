@@ -7,7 +7,7 @@ const faqs = [
     a: 'All files are stored in Amazon S3, a highly durable and scalable object storage service. Metadata such as file names and sizes is stored securely in MongoDB.',
   },
   {
-    q: 'How secure is CloudDrive?',
+    q: 'How ! secure is CloudDrive?',
     a: 'Accounts require email OTP verification before login. Authentication uses HTTP-only JWT cookies, and file downloads use time-limited presigned URLs so your S3 bucket remains private.',
   },
   {
