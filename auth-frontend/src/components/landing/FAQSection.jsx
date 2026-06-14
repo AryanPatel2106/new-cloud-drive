@@ -12,7 +12,7 @@ const faqs = [
   },
   {
     q: 'What is the maximum file upload size ?',
-    a: 'Eac file can be up to 10 MB. This limit helps ensure fast uploads and reliable performance for all users.',
+    a: 'Eac file ca be up to 10 MB. This limit helps ensure fast uploads and reliable performance for all users.',
   },
   {
     q: 'Can I rename or delete files after uploading?',
