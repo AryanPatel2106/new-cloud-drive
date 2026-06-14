@@ -1,0 +1,3887 @@
+{
+  "version": 4,
+  "terraform_version": "1.15.6",
+  "serial": 73,
+  "lineage": "5a6c2156-589a-1b7b-36f9-6da5ab9d6c2c",
+  "outputs": {
+    "backend_ecr_repository_url": {
+      "value": "160244693908.dkr.ecr.ap-south-1.amazonaws.com/clouddrive-backend",
+      "type": "string"
+    },
+    "bastion_public_ip": {
+      "value": "13.200.249.10",
+      "type": "string"
+    },
+    "frontend_ecr_repository_url": {
+      "value": "160244693908.dkr.ecr.ap-south-1.amazonaws.com/clouddrive-frontend",
+      "type": "string"
+    },
+    "github_actions_role_arn": {
+      "value": "arn:aws:iam::160244693908:role/clouddrive-github-deploy-role",
+      "type": "string"
+    },
+    "internal_alb_dns_name": {
+      "value": "internal-clouddrive-internal-alb-1018917724.ap-south-1.elb.amazonaws.com",
+      "type": "string"
+    },
+    "public_alb_dns_name": {
+      "value": "clouddrive-public-alb-708378797.ap-south-1.elb.amazonaws.com",
+      "type": "string"
+    },
+    "vpc_id": {
+      "value": "vpc-0de12d6ca3974c639",
+      "type": "string"
+    }
+  },
+  "resources": [
+    {
+      "mode": "data",
+      "type": "aws_ami",
+      "name": "amazon_linux_2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "architecture": "x86_64",
+            "arn": "arn:aws:ec2:ap-south-1::image/ami-05726d1f069460e90",
+            "block_device_mappings": [
+              {
+                "device_name": "/dev/xvda",
+                "ebs": {
+                  "delete_on_termination": "true",
+                  "encrypted": "false",
+                  "iops": "0",
+                  "snapshot_id": "snap-03d1c7987903229ad",
+                  "throughput": "0",
+                  "volume_initialization_rate": "0",
+                  "volume_size": "8",
+                  "volume_type": "gp2"
+                },
+                "no_device": "",
+                "virtual_name": ""
+              }
+            ],
+            "boot_mode": "",
+            "creation_date": "2026-06-11T21:19:03.000Z",
+            "deprecation_time": "2026-09-09T22:59:00.000Z",
+            "description": "Amazon Linux 2 AMI 2.0.20260615.0 x86_64 HVM gp2",
+            "ena_support": true,
+            "executable_users": null,
+            "filter": [
+              {
+                "name": "name",
+                "values": [
+                  "amzn2-ami-hvm-*-x86_64-gp2"
+                ]
+              },
+              {
+                "name": "virtualization-type",
+                "values": [
+                  "hvm"
+                ]
+              }
+            ],
+            "hypervisor": "xen",
+            "id": "ami-05726d1f069460e90",
+            "image_id": "ami-05726d1f069460e90",
+            "image_location": "amazon/amzn2-ami-hvm-2.0.20260615.0-x86_64-gp2",
+            "image_owner_alias": "amazon",
+            "image_type": "machine",
+            "imds_support": "",
+            "include_deprecated": false,
+            "kernel_id": "",
+            "last_launched_time": "",
+            "most_recent": true,
+            "name": "amzn2-ami-hvm-2.0.20260615.0-x86_64-gp2",
+            "name_regex": null,
+            "owner_id": "137112412989",
+            "owners": [
+              "amazon"
+            ],
+            "platform": "",
+            "platform_details": "Linux/UNIX",
+            "product_codes": [],
+            "public": true,
+            "ramdisk_id": "",
+            "root_device_name": "/dev/xvda",
+            "root_device_type": "ebs",
+            "root_snapshot_id": "snap-03d1c7987903229ad",
+            "sriov_net_support": "simple",
+            "state": "available",
+            "state_reason": {
+              "code": "UNSET",
+              "message": "UNSET"
+            },
+            "tags": {},
+            "timeouts": null,
+            "tpm_support": "",
+            "uefi_data": null,
+            "usage_operation": "RunInstances",
+            "virtualization_type": "hvm"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "data",
+      "type": "aws_availability_zones",
+      "name": "available",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "all_availability_zones": null,
+            "exclude_names": null,
+            "exclude_zone_ids": null,
+            "filter": null,
+            "group_names": [
+              "ap-south-1-zg-1"
+            ],
+            "id": "ap-south-1",
+            "names": [
+              "ap-south-1a",
+              "ap-south-1b",
+              "ap-south-1c"
+            ],
+            "state": "available",
+            "timeouts": null,
+            "zone_ids": [
+              "aps1-az1",
+              "aps1-az3",
+              "aps1-az2"
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_autoscaling_group",
+      "name": "backend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:ap-south-1:160244693908:autoScalingGroup:11069428-60a2-4af2-b597-60872639b13d:autoScalingGroupName/clouddrive-backend-asg-2026061408485582220000000e",
+            "availability_zone_distribution": [
+              {
+                "capacity_distribution_strategy": "balanced-best-effort"
+              }
+            ],
+            "availability_zones": [
+              "ap-south-1a",
+              "ap-south-1b"
+            ],
+            "capacity_rebalance": false,
+            "capacity_reservation_specification": [
+              {
+                "capacity_reservation_preference": "default",
+                "capacity_reservation_target": []
+              }
+            ],
+            "context": "",
+            "default_cooldown": 300,
+            "default_instance_warmup": 0,
+            "desired_capacity": 2,
+            "desired_capacity_type": "",
+            "enabled_metrics": [],
+            "force_delete": false,
+            "force_delete_warm_pool": false,
+            "health_check_grace_period": 300,
+            "health_check_type": "ELB",
+            "id": "clouddrive-backend-asg-2026061408485582220000000e",
+            "ignore_failed_scaling_activities": false,
+            "initial_lifecycle_hook": [],
+            "instance_maintenance_policy": [],
+            "instance_refresh": [
+              {
+                "preferences": [
+                  {
+                    "alarm_specification": [],
+                    "auto_rollback": false,
+                    "checkpoint_delay": "",
+                    "checkpoint_percentages": [],
+                    "instance_warmup": "",
+                    "max_healthy_percentage": 100,
+                    "min_healthy_percentage": 50,
+                    "scale_in_protected_instances": "Ignore",
+                    "skip_matching": false,
+                    "standby_instances": "Ignore"
+                  }
+                ],
+                "strategy": "Rolling",
+                "triggers": [
+                  "tag"
+                ]
+              }
+            ],
+            "launch_configuration": "",
+            "launch_template": [
+              {
+                "id": "lt-0688c94684d5a73a2",
+                "name": "clouddrive-backend-lt-2026061408484969240000000c",
+                "version": "$Latest"
+              }
+            ],
+            "load_balancers": [],
+            "max_instance_lifetime": 0,
+            "max_size": 4,
+            "metrics_granularity": "1Minute",
+            "min_elb_capacity": null,
+            "min_size": 1,
+            "mixed_instances_policy": [],
+            "name": "clouddrive-backend-asg-2026061408485582220000000e",
+            "name_prefix": "clouddrive-backend-asg-",
+            "placement_group": "",
+            "predicted_capacity": 0,
+            "protect_from_scale_in": false,
+            "service_linked_role_arn": "arn:aws:iam::160244693908:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+            "suspended_processes": [],
+            "tag": [
+              {
+                "key": "Environment",
+                "propagate_at_launch": true,
+                "value": "production"
+              },
+              {
+                "key": "Name",
+                "propagate_at_launch": true,
+                "value": "clouddrive-backend-asg-instance"
+              }
+            ],
+            "target_group_arns": [
+              "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-backend-tg/78946ffe3a186ac3"
+            ],
+            "termination_policies": [],
+            "timeouts": null,
+            "traffic_source": [
+              {
+                "identifier": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-backend-tg/78946ffe3a186ac3",
+                "type": "elbv2"
+              }
+            ],
+            "vpc_zone_identifier": [
+              "subnet-063c81f0e08cf5b7e",
+              "subnet-091119a599a807fdc"
+            ],
+            "wait_for_capacity_timeout": "10m",
+            "wait_for_elb_capacity": null,
+            "warm_pool": [],
+            "warm_pool_size": 0
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjo2MDAwMDAwMDAwMDAsInVwZGF0ZSI6NjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_ecr_repository.backend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_launch_template.backend",
+            "aws_lb_target_group.backend",
+            "aws_secretsmanager_secret.backend_secrets",
+            "aws_security_group.backend_ec2",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_ssm_parameter.backend_image_tag",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_autoscaling_group",
+      "name": "frontend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:autoscaling:ap-south-1:160244693908:autoScalingGroup:6ca2d14a-1f9e-45d8-a424-5fd887bf48b8:autoScalingGroupName/clouddrive-frontend-asg-20260614085154135100000011",
+            "availability_zone_distribution": [
+              {
+                "capacity_distribution_strategy": "balanced-best-effort"
+              }
+            ],
+            "availability_zones": [
+              "ap-south-1a",
+              "ap-south-1b"
+            ],
+            "capacity_rebalance": false,
+            "capacity_reservation_specification": [
+              {
+                "capacity_reservation_preference": "default",
+                "capacity_reservation_target": []
+              }
+            ],
+            "context": "",
+            "default_cooldown": 300,
+            "default_instance_warmup": 0,
+            "desired_capacity": 2,
+            "desired_capacity_type": "",
+            "enabled_metrics": [],
+            "force_delete": false,
+            "force_delete_warm_pool": false,
+            "health_check_grace_period": 300,
+            "health_check_type": "ELB",
+            "id": "clouddrive-frontend-asg-20260614085154135100000011",
+            "ignore_failed_scaling_activities": false,
+            "initial_lifecycle_hook": [],
+            "instance_maintenance_policy": [],
+            "instance_refresh": [
+              {
+                "preferences": [
+                  {
+                    "alarm_specification": [],
+                    "auto_rollback": false,
+                    "checkpoint_delay": "",
+                    "checkpoint_percentages": [],
+                    "instance_warmup": "",
+                    "max_healthy_percentage": 100,
+                    "min_healthy_percentage": 50,
+                    "scale_in_protected_instances": "Ignore",
+                    "skip_matching": false,
+                    "standby_instances": "Ignore"
+                  }
+                ],
+                "strategy": "Rolling",
+                "triggers": [
+                  "tag"
+                ]
+              }
+            ],
+            "launch_configuration": "",
+            "launch_template": [
+              {
+                "id": "lt-0831708ca361099cc",
+                "name": "clouddrive-frontend-lt-2026061408514815370000000f",
+                "version": "$Latest"
+              }
+            ],
+            "load_balancers": [],
+            "max_instance_lifetime": 0,
+            "max_size": 4,
+            "metrics_granularity": "1Minute",
+            "min_elb_capacity": null,
+            "min_size": 1,
+            "mixed_instances_policy": [],
+            "name": "clouddrive-frontend-asg-20260614085154135100000011",
+            "name_prefix": "clouddrive-frontend-asg-",
+            "placement_group": "",
+            "predicted_capacity": 0,
+            "protect_from_scale_in": false,
+            "service_linked_role_arn": "arn:aws:iam::160244693908:role/aws-service-role/autoscaling.amazonaws.com/AWSServiceRoleForAutoScaling",
+            "suspended_processes": [],
+            "tag": [
+              {
+                "key": "Environment",
+                "propagate_at_launch": true,
+                "value": "production"
+              },
+              {
+                "key": "Name",
+                "propagate_at_launch": true,
+                "value": "clouddrive-frontend-asg-instance"
+              }
+            ],
+            "target_group_arns": [
+              "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-frontend-tg/055884439bbb940a"
+            ],
+            "termination_policies": [],
+            "timeouts": null,
+            "traffic_source": [
+              {
+                "identifier": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-frontend-tg/055884439bbb940a",
+                "type": "elbv2"
+              }
+            ],
+            "vpc_zone_identifier": [
+              "subnet-063c81f0e08cf5b7e",
+              "subnet-091119a599a807fdc"
+            ],
+            "wait_for_capacity_timeout": "10m",
+            "wait_for_elb_capacity": null,
+            "warm_pool": [],
+            "warm_pool_size": 0
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjo2MDAwMDAwMDAwMDAsInVwZGF0ZSI6NjAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_ecr_repository.frontend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_launch_template.frontend",
+            "aws_lb.internal",
+            "aws_lb_target_group.frontend",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_ssm_parameter.frontend_image_tag",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_autoscaling_policy",
+      "name": "backend_cpu",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "adjustment_type": "",
+            "arn": "arn:aws:autoscaling:ap-south-1:160244693908:scalingPolicy:7e5e791d-37d6-4036-9be5-074a70f09d04:autoScalingGroupName/clouddrive-backend-asg-2026061408485582220000000e:policyName/clouddrive-backend-cpu-policy",
+            "autoscaling_group_name": "clouddrive-backend-asg-2026061408485582220000000e",
+            "cooldown": 0,
+            "enabled": true,
+            "estimated_instance_warmup": 0,
+            "id": "clouddrive-backend-cpu-policy",
+            "metric_aggregation_type": "",
+            "min_adjustment_magnitude": 0,
+            "name": "clouddrive-backend-cpu-policy",
+            "policy_type": "TargetTrackingScaling",
+            "predictive_scaling_configuration": [],
+            "scaling_adjustment": 0,
+            "step_adjustment": [],
+            "target_tracking_configuration": [
+              {
+                "customized_metric_specification": [],
+                "disable_scale_in": false,
+                "predefined_metric_specification": [
+                  {
+                    "predefined_metric_type": "ASGAverageCPUUtilization",
+                    "resource_label": ""
+                  }
+                ],
+                "target_value": 70
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_autoscaling_group.backend",
+            "aws_ecr_repository.backend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_launch_template.backend",
+            "aws_lb_target_group.backend",
+            "aws_secretsmanager_secret.backend_secrets",
+            "aws_security_group.backend_ec2",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_ssm_parameter.backend_image_tag",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_autoscaling_policy",
+      "name": "frontend_cpu",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "adjustment_type": "",
+            "arn": "arn:aws:autoscaling:ap-south-1:160244693908:scalingPolicy:4d50e0f2-06e3-49af-945c-dc0333b1b4d5:autoScalingGroupName/clouddrive-frontend-asg-20260614085154135100000011:policyName/clouddrive-frontend-cpu-policy",
+            "autoscaling_group_name": "clouddrive-frontend-asg-20260614085154135100000011",
+            "cooldown": 0,
+            "enabled": true,
+            "estimated_instance_warmup": 0,
+            "id": "clouddrive-frontend-cpu-policy",
+            "metric_aggregation_type": "",
+            "min_adjustment_magnitude": 0,
+            "name": "clouddrive-frontend-cpu-policy",
+            "policy_type": "TargetTrackingScaling",
+            "predictive_scaling_configuration": [],
+            "scaling_adjustment": 0,
+            "step_adjustment": [],
+            "target_tracking_configuration": [
+              {
+                "customized_metric_specification": [],
+                "disable_scale_in": false,
+                "predefined_metric_specification": [
+                  {
+                    "predefined_metric_type": "ASGAverageCPUUtilization",
+                    "resource_label": ""
+                  }
+                ],
+                "target_value": 70
+              }
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_autoscaling_group.frontend",
+            "aws_ecr_repository.frontend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_launch_template.frontend",
+            "aws_lb.internal",
+            "aws_lb_target_group.frontend",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_ssm_parameter.frontend_image_tag",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudwatch_metric_alarm",
+      "name": "backend_cpu_high",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:ap-south-1:160244693908:clouddrive-alerts-topic"
+            ],
+            "alarm_description": "This alarm monitors Backend ASG CPU utilization",
+            "alarm_name": "clouddrive-backend-cpu-high",
+            "arn": "arn:aws:cloudwatch:ap-south-1:160244693908:alarm:clouddrive-backend-cpu-high",
+            "comparison_operator": "GreaterThanOrEqualToThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "AutoScalingGroupName": "clouddrive-backend-asg-2026061408485582220000000e"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 2,
+            "extended_statistic": "",
+            "id": "clouddrive-backend-cpu-high",
+            "insufficient_data_actions": [],
+            "metric_name": "CPUUtilization",
+            "metric_query": [],
+            "namespace": "AWS/EC2",
+            "ok_actions": [],
+            "period": 300,
+            "statistic": "Average",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "threshold": 80,
+            "threshold_metric_id": "",
+            "treat_missing_data": "missing",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "aws_autoscaling_group.backend",
+            "aws_ecr_repository.backend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_launch_template.backend",
+            "aws_lb_target_group.backend",
+            "aws_secretsmanager_secret.backend_secrets",
+            "aws_security_group.backend_ec2",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_sns_topic.alerts",
+            "aws_ssm_parameter.backend_image_tag",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudwatch_metric_alarm",
+      "name": "backend_unhealthy_hosts",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:ap-south-1:160244693908:clouddrive-alerts-topic"
+            ],
+            "alarm_description": "Unhealthy hosts count in Backend Target Group is greater than 0",
+            "alarm_name": "clouddrive-backend-unhealthy-hosts",
+            "arn": "arn:aws:cloudwatch:ap-south-1:160244693908:alarm:clouddrive-backend-unhealthy-hosts",
+            "comparison_operator": "GreaterThanThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "LoadBalancer": "app/clouddrive-internal-alb/2914e39ff36b96e1",
+              "TargetGroup": "targetgroup/clouddrive-backend-tg/78946ffe3a186ac3"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 1,
+            "extended_statistic": "",
+            "id": "clouddrive-backend-unhealthy-hosts",
+            "insufficient_data_actions": [],
+            "metric_name": "UnHealthyHostCount",
+            "metric_query": [],
+            "namespace": "AWS/ApplicationELB",
+            "ok_actions": [],
+            "period": 60,
+            "statistic": "Average",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "threshold": 0,
+            "threshold_metric_id": "",
+            "treat_missing_data": "missing",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "aws_lb.internal",
+            "aws_lb_target_group.backend",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_sns_topic.alerts",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudwatch_metric_alarm",
+      "name": "frontend_cpu_high",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:ap-south-1:160244693908:clouddrive-alerts-topic"
+            ],
+            "alarm_description": "This alarm monitors Frontend ASG CPU utilization",
+            "alarm_name": "clouddrive-frontend-cpu-high",
+            "arn": "arn:aws:cloudwatch:ap-south-1:160244693908:alarm:clouddrive-frontend-cpu-high",
+            "comparison_operator": "GreaterThanOrEqualToThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "AutoScalingGroupName": "clouddrive-frontend-asg-20260614085154135100000011"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 2,
+            "extended_statistic": "",
+            "id": "clouddrive-frontend-cpu-high",
+            "insufficient_data_actions": [],
+            "metric_name": "CPUUtilization",
+            "metric_query": [],
+            "namespace": "AWS/EC2",
+            "ok_actions": [],
+            "period": 300,
+            "statistic": "Average",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "threshold": 80,
+            "threshold_metric_id": "",
+            "treat_missing_data": "missing",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "aws_autoscaling_group.frontend",
+            "aws_ecr_repository.frontend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_launch_template.frontend",
+            "aws_lb.internal",
+            "aws_lb_target_group.frontend",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_sns_topic.alerts",
+            "aws_ssm_parameter.frontend_image_tag",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_cloudwatch_metric_alarm",
+      "name": "frontend_unhealthy_hosts",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "actions_enabled": true,
+            "alarm_actions": [
+              "arn:aws:sns:ap-south-1:160244693908:clouddrive-alerts-topic"
+            ],
+            "alarm_description": "Unhealthy hosts count in Frontend Target Group is greater than 0",
+            "alarm_name": "clouddrive-frontend-unhealthy-hosts",
+            "arn": "arn:aws:cloudwatch:ap-south-1:160244693908:alarm:clouddrive-frontend-unhealthy-hosts",
+            "comparison_operator": "GreaterThanThreshold",
+            "datapoints_to_alarm": 0,
+            "dimensions": {
+              "LoadBalancer": "app/clouddrive-public-alb/faea3dff392b226f",
+              "TargetGroup": "targetgroup/clouddrive-frontend-tg/055884439bbb940a"
+            },
+            "evaluate_low_sample_count_percentiles": "",
+            "evaluation_periods": 1,
+            "extended_statistic": "",
+            "id": "clouddrive-frontend-unhealthy-hosts",
+            "insufficient_data_actions": [],
+            "metric_name": "UnHealthyHostCount",
+            "metric_query": [],
+            "namespace": "AWS/ApplicationELB",
+            "ok_actions": [],
+            "period": 60,
+            "statistic": "Average",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "threshold": 0,
+            "threshold_metric_id": "",
+            "treat_missing_data": "missing",
+            "unit": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "dependencies": [
+            "aws_lb.public",
+            "aws_lb_target_group.frontend",
+            "aws_security_group.public_alb",
+            "aws_sns_topic.alerts",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_ecr_lifecycle_policy",
+      "name": "backend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "clouddrive-backend",
+            "policy": "{\"rules\":[{\"action\":{\"type\":\"expire\"},\"description\":\"Expire untagged images older than 14 days\",\"rulePriority\":1,\"selection\":{\"countNumber\":14,\"countType\":\"sinceImagePushed\",\"countUnit\":\"days\",\"tagStatus\":\"untagged\"}}]}",
+            "registry_id": "160244693908",
+            "repository": "clouddrive-backend"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_ecr_repository.backend"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_ecr_lifecycle_policy",
+      "name": "frontend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "clouddrive-frontend",
+            "policy": "{\"rules\":[{\"action\":{\"type\":\"expire\"},\"description\":\"Expire untagged images older than 14 days\",\"rulePriority\":1,\"selection\":{\"countNumber\":14,\"countType\":\"sinceImagePushed\",\"countUnit\":\"days\",\"tagStatus\":\"untagged\"}}]}",
+            "registry_id": "160244693908",
+            "repository": "clouddrive-frontend"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_ecr_repository.frontend"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_ecr_repository",
+      "name": "backend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ecr:ap-south-1:160244693908:repository/clouddrive-backend",
+            "encryption_configuration": [
+              {
+                "encryption_type": "AES256",
+                "kms_key": ""
+              }
+            ],
+            "force_delete": null,
+            "id": "clouddrive-backend",
+            "image_scanning_configuration": [
+              {
+                "scan_on_push": true
+              }
+            ],
+            "image_tag_mutability": "MUTABLE",
+            "name": "clouddrive-backend",
+            "registry_id": "160244693908",
+            "repository_url": "160244693908.dkr.ecr.ap-south-1.amazonaws.com/clouddrive-backend",
+            "tags": {
+              "Name": "clouddrive-backend-ecr"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-backend-ecr",
+              "Project": "clouddrive"
+            },
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjoxMjAwMDAwMDAwMDAwfX0=",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_ecr_repository",
+      "name": "frontend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ecr:ap-south-1:160244693908:repository/clouddrive-frontend",
+            "encryption_configuration": [
+              {
+                "encryption_type": "AES256",
+                "kms_key": ""
+              }
+            ],
+            "force_delete": null,
+            "id": "clouddrive-frontend",
+            "image_scanning_configuration": [
+              {
+                "scan_on_push": true
+              }
+            ],
+            "image_tag_mutability": "MUTABLE",
+            "name": "clouddrive-frontend",
+            "registry_id": "160244693908",
+            "repository_url": "160244693908.dkr.ecr.ap-south-1.amazonaws.com/clouddrive-frontend",
+            "tags": {
+              "Name": "clouddrive-frontend-ecr"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-frontend-ecr",
+              "Project": "clouddrive"
+            },
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiZGVsZXRlIjoxMjAwMDAwMDAwMDAwfX0=",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_instance_profile",
+      "name": "ec2_profile",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::160244693908:instance-profile/clouddrive-ec2-profile",
+            "create_date": "2026-06-14T08:48:26Z",
+            "id": "clouddrive-ec2-profile",
+            "name": "clouddrive-ec2-profile",
+            "name_prefix": "",
+            "path": "/",
+            "role": "clouddrive-ec2-role",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "unique_id": "AIPASKT2T7OKDCINCN3KT"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.ec2_role"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_openid_connect_provider",
+      "name": "github",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::160244693908:oidc-provider/token.actions.githubusercontent.com",
+            "client_id_list": [
+              "sts.amazonaws.com"
+            ],
+            "id": "arn:aws:iam::160244693908:oidc-provider/token.actions.githubusercontent.com",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "thumbprint_list": [
+              "6938fd4d98bab03faadb97b34396831e3780aea1",
+              "1c58a3a8518e8759bf075b76b750d4f2df264fcd"
+            ],
+            "url": "token.actions.githubusercontent.com"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "ec2_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::160244693908:policy/clouddrive-ec2-policy",
+            "attachment_count": 1,
+            "description": "Permissions for ECR, SSM Parameter Store, Secrets Manager, and CloudWatch",
+            "id": "arn:aws:iam::160244693908:policy/clouddrive-ec2-policy",
+            "name": "clouddrive-ec2-policy",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":[\"ecr:GetAuthorizationToken\",\"ecr:BatchCheckLayerAvailability\",\"ecr:GetDownloadUrlForLayer\",\"ecr:BatchGetImage\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ssm:GetParameter\",\"ssm:GetParameters\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:ssm:*:*:parameter/clouddrive/*\"},{\"Action\":[\"secretsmanager:GetSecretValue\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:secretsmanager:*:*:secret:clouddrive/*\"},{\"Action\":[\"logs:CreateLogGroup\",\"logs:CreateLogStream\",\"logs:PutLogEvents\",\"logs:DescribeLogStreams\",\"cloudwatch:PutMetricData\"],\"Effect\":\"Allow\",\"Resource\":\"*\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPASKT2T7OKEPXTWGQRT",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            }
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy",
+      "name": "github_actions_policy",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::160244693908:policy/clouddrive-github-deploy-policy",
+            "attachment_count": 1,
+            "description": "Permissions for GitHub Actions to push containers and trigger ASG rolling deployments",
+            "id": "arn:aws:iam::160244693908:policy/clouddrive-github-deploy-policy",
+            "name": "clouddrive-github-deploy-policy",
+            "name_prefix": "",
+            "path": "/",
+            "policy": "{\"Statement\":[{\"Action\":[\"ecr:GetAuthorizationToken\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ecr:BatchCheckLayerAvailability\",\"ecr:GetDownloadUrlForLayer\",\"ecr:BatchGetImage\",\"ecr:InitiateLayerUpload\",\"ecr:UploadLayerPart\",\"ecr:CompleteLayerUpload\",\"ecr:PutImage\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:ecr:*:*:repository/clouddrive-*\"},{\"Action\":[\"ssm:PutParameter\",\"ssm:GetParameter\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:ssm:*:*:parameter/clouddrive/*\"},{\"Action\":[\"ec2:DescribeLaunchTemplates\",\"ec2:DescribeLaunchTemplateVersions\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"ec2:CreateLaunchTemplateVersion\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:ec2:*:*:launch-template/*\"},{\"Action\":[\"autoscaling:DescribeInstanceRefreshes\",\"autoscaling:DescribeAutoScalingGroups\"],\"Effect\":\"Allow\",\"Resource\":\"*\"},{\"Action\":[\"autoscaling:StartInstanceRefresh\"],\"Effect\":\"Allow\",\"Resource\":\"arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/clouddrive-*\"}],\"Version\":\"2012-10-17\"}",
+            "policy_id": "ANPASKT2T7OKBIH2MFG4Z",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            }
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "ec2_role",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::160244693908:role/clouddrive-ec2-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRole\",\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ec2.amazonaws.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-06-14T08:48:25Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "clouddrive-ec2-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::160244693908:policy/clouddrive-ec2-policy",
+              "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+            ],
+            "max_session_duration": 3600,
+            "name": "clouddrive-ec2-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "unique_id": "AROASKT2T7OKARLIMUG7T"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "github_actions",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:iam::160244693908:role/clouddrive-github-deploy-role",
+            "assume_role_policy": "{\"Statement\":[{\"Action\":\"sts:AssumeRoleWithWebIdentity\",\"Condition\":{\"StringEquals\":{\"token.actions.githubusercontent.com:aud\":\"sts.amazonaws.com\"},\"StringLike\":{\"token.actions.githubusercontent.com:sub\":\"repo:AryanPatel2106/new-cloud-drive:*\"}},\"Effect\":\"Allow\",\"Principal\":{\"Federated\":\"arn:aws:iam::160244693908:oidc-provider/token.actions.githubusercontent.com\"}}],\"Version\":\"2012-10-17\"}",
+            "create_date": "2026-06-14T08:48:25Z",
+            "description": "",
+            "force_detach_policies": false,
+            "id": "clouddrive-github-deploy-role",
+            "inline_policy": [],
+            "managed_policy_arns": [
+              "arn:aws:iam::160244693908:policy/clouddrive-github-deploy-policy"
+            ],
+            "max_session_duration": 3600,
+            "name": "clouddrive-github-deploy-role",
+            "name_prefix": "",
+            "path": "/",
+            "permissions_boundary": "",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "unique_id": "AROASKT2T7OKKTP33P74U"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_openid_connect_provider.github"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ec2_attach",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "clouddrive-ec2-role-20260614084826381000000003",
+            "policy_arn": "arn:aws:iam::160244693908:policy/clouddrive-ec2-policy",
+            "role": "clouddrive-ec2-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_policy.ec2_policy",
+            "aws_iam_role.ec2_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ec2_ssm_core",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "clouddrive-ec2-role-20260614084826386600000004",
+            "policy_arn": "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore",
+            "role": "clouddrive-ec2-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_role.ec2_role"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "github_actions_attach",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "id": "clouddrive-github-deploy-role-20260614084826873900000005",
+            "policy_arn": "arn:aws:iam::160244693908:policy/clouddrive-github-deploy-policy",
+            "role": "clouddrive-github-deploy-role"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_openid_connect_provider.github",
+            "aws_iam_policy.github_actions_policy",
+            "aws_iam_role.github_actions"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "bastion",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "ami": "ami-05726d1f069460e90",
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:instance/i-00a2d00d1a8b91864",
+            "associate_public_ip_address": true,
+            "availability_zone": "ap-south-1a",
+            "capacity_reservation_specification": [
+              {
+                "capacity_reservation_preference": "open",
+                "capacity_reservation_target": []
+              }
+            ],
+            "cpu_core_count": 1,
+            "cpu_options": [
+              {
+                "amd_sev_snp": "",
+                "core_count": 1,
+                "threads_per_core": 2
+              }
+            ],
+            "cpu_threads_per_core": 2,
+            "credit_specification": [
+              {
+                "cpu_credits": "unlimited"
+              }
+            ],
+            "disable_api_stop": false,
+            "disable_api_termination": false,
+            "ebs_block_device": [],
+            "ebs_optimized": false,
+            "enable_primary_ipv6": null,
+            "enclave_options": [
+              {
+                "enabled": false
+              }
+            ],
+            "ephemeral_block_device": [],
+            "get_password_data": false,
+            "hibernation": false,
+            "host_id": "",
+            "host_resource_group_arn": null,
+            "iam_instance_profile": "",
+            "id": "i-00a2d00d1a8b91864",
+            "instance_initiated_shutdown_behavior": "stop",
+            "instance_lifecycle": "",
+            "instance_market_options": [],
+            "instance_state": "running",
+            "instance_type": "t3.micro",
+            "ipv6_address_count": 0,
+            "ipv6_addresses": [],
+            "key_name": "",
+            "launch_template": [],
+            "maintenance_options": [
+              {
+                "auto_recovery": "default"
+              }
+            ],
+            "metadata_options": [
+              {
+                "http_endpoint": "enabled",
+                "http_protocol_ipv6": "disabled",
+                "http_put_response_hop_limit": 1,
+                "http_tokens": "optional",
+                "instance_metadata_tags": "disabled"
+              }
+            ],
+            "monitoring": false,
+            "network_interface": [],
+            "outpost_arn": "",
+            "password_data": "",
+            "placement_group": "",
+            "placement_partition_number": 0,
+            "primary_network_interface_id": "eni-07faf3565bf26baa0",
+            "private_dns": "ip-10-0-1-18.ap-south-1.compute.internal",
+            "private_dns_name_options": [
+              {
+                "enable_resource_name_dns_a_record": false,
+                "enable_resource_name_dns_aaaa_record": false,
+                "hostname_type": "ip-name"
+              }
+            ],
+            "private_ip": "10.0.1.18",
+            "public_dns": "ec2-13-200-249-10.ap-south-1.compute.amazonaws.com",
+            "public_ip": "13.200.249.10",
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "device_name": "/dev/xvda",
+                "encrypted": false,
+                "iops": 100,
+                "kms_key_id": "",
+                "tags": {
+                  "Environment": "production",
+                  "ManagedBy": "Terraform",
+                  "Project": "clouddrive"
+                },
+                "tags_all": {
+                  "Environment": "production",
+                  "ManagedBy": "Terraform",
+                  "Project": "clouddrive"
+                },
+                "throughput": 0,
+                "volume_id": "vol-01bc8c1e8c4c3a856",
+                "volume_size": 8,
+                "volume_type": "gp2"
+              }
+            ],
+            "secondary_private_ips": [],
+            "security_groups": [],
+            "source_dest_check": true,
+            "spot_instance_request_id": "",
+            "subnet_id": "subnet-0995fa17d8accb622",
+            "tags": {
+              "Name": "clouddrive-bastion"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-bastion",
+              "Project": "clouddrive"
+            },
+            "tenancy": "default",
+            "timeouts": null,
+            "user_data": null,
+            "user_data_base64": null,
+            "user_data_replace_on_change": false,
+            "volume_tags": null,
+            "vpc_security_group_ids": [
+              "sg-02716db332fad0b2b"
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMCwicmVhZCI6OTAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_security_group.bastion",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "nat_instance",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "ami": "ami-05726d1f069460e90",
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:instance/i-0eac523958a1ecab5",
+            "associate_public_ip_address": true,
+            "availability_zone": "ap-south-1a",
+            "capacity_reservation_specification": [
+              {
+                "capacity_reservation_preference": "open",
+                "capacity_reservation_target": []
+              }
+            ],
+            "cpu_core_count": 1,
+            "cpu_options": [
+              {
+                "amd_sev_snp": "",
+                "core_count": 1,
+                "threads_per_core": 2
+              }
+            ],
+            "cpu_threads_per_core": 2,
+            "credit_specification": [
+              {
+                "cpu_credits": "unlimited"
+              }
+            ],
+            "disable_api_stop": false,
+            "disable_api_termination": false,
+            "ebs_block_device": [],
+            "ebs_optimized": false,
+            "enable_primary_ipv6": null,
+            "enclave_options": [
+              {
+                "enabled": false
+              }
+            ],
+            "ephemeral_block_device": [],
+            "get_password_data": false,
+            "hibernation": false,
+            "host_id": "",
+            "host_resource_group_arn": null,
+            "iam_instance_profile": "",
+            "id": "i-0eac523958a1ecab5",
+            "instance_initiated_shutdown_behavior": "stop",
+            "instance_lifecycle": "",
+            "instance_market_options": [],
+            "instance_state": "running",
+            "instance_type": "t3.micro",
+            "ipv6_address_count": 0,
+            "ipv6_addresses": [],
+            "key_name": "",
+            "launch_template": [],
+            "maintenance_options": [
+              {
+                "auto_recovery": "default"
+              }
+            ],
+            "metadata_options": [
+              {
+                "http_endpoint": "enabled",
+                "http_protocol_ipv6": "disabled",
+                "http_put_response_hop_limit": 1,
+                "http_tokens": "optional",
+                "instance_metadata_tags": "disabled"
+              }
+            ],
+            "monitoring": false,
+            "network_interface": [],
+            "outpost_arn": "",
+            "password_data": "",
+            "placement_group": "",
+            "placement_partition_number": 0,
+            "primary_network_interface_id": "eni-0933fd9a752b14b5b",
+            "private_dns": "ip-10-0-1-223.ap-south-1.compute.internal",
+            "private_dns_name_options": [
+              {
+                "enable_resource_name_dns_a_record": false,
+                "enable_resource_name_dns_aaaa_record": false,
+                "hostname_type": "ip-name"
+              }
+            ],
+            "private_ip": "10.0.1.223",
+            "public_dns": "ec2-13-201-90-107.ap-south-1.compute.amazonaws.com",
+            "public_ip": "13.201.90.107",
+            "root_block_device": [
+              {
+                "delete_on_termination": true,
+                "device_name": "/dev/xvda",
+                "encrypted": false,
+                "iops": 100,
+                "kms_key_id": "",
+                "tags": {
+                  "Environment": "production",
+                  "ManagedBy": "Terraform",
+                  "Project": "clouddrive"
+                },
+                "tags_all": {
+                  "Environment": "production",
+                  "ManagedBy": "Terraform",
+                  "Project": "clouddrive"
+                },
+                "throughput": 0,
+                "volume_id": "vol-01cea79876f832a35",
+                "volume_size": 8,
+                "volume_type": "gp2"
+              }
+            ],
+            "secondary_private_ips": [],
+            "security_groups": [],
+            "source_dest_check": false,
+            "spot_instance_request_id": "",
+            "subnet_id": "subnet-0995fa17d8accb622",
+            "tags": {
+              "Name": "clouddrive-nat-instance"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-nat-instance",
+              "Project": "clouddrive"
+            },
+            "tenancy": "default",
+            "timeouts": null,
+            "user_data": "1a2ccfa1b20160c0bc3138cbd87e9cf0365b8268",
+            "user_data_base64": null,
+            "user_data_replace_on_change": false,
+            "volume_tags": null,
+            "vpc_security_group_ids": [
+              "sg-049ab25672d17eb00"
+            ]
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMCwicmVhZCI6OTAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_security_group.nat",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_internet_gateway",
+      "name": "igw",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:internet-gateway/igw-020515be22d1da389",
+            "id": "igw-020515be22d1da389",
+            "owner_id": "160244693908",
+            "tags": {
+              "Name": "clouddrive-igw"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-igw",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjoxMjAwMDAwMDAwMDAwLCJkZWxldGUiOjEyMDAwMDAwMDAwMDAsInVwZGF0ZSI6MTIwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_launch_template",
+      "name": "backend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:launch-template/lt-0688c94684d5a73a2",
+            "block_device_mappings": [],
+            "capacity_reservation_specification": [],
+            "cpu_options": [],
+            "credit_specification": [],
+            "default_version": 1,
+            "description": "",
+            "disable_api_stop": false,
+            "disable_api_termination": false,
+            "ebs_optimized": "",
+            "elastic_gpu_specifications": [],
+            "elastic_inference_accelerator": [],
+            "enclave_options": [],
+            "hibernation_options": [],
+            "iam_instance_profile": [
+              {
+                "arn": "",
+                "name": "clouddrive-ec2-profile"
+              }
+            ],
+            "id": "lt-0688c94684d5a73a2",
+            "image_id": "ami-05726d1f069460e90",
+            "instance_initiated_shutdown_behavior": "",
+            "instance_market_options": [],
+            "instance_requirements": [],
+            "instance_type": "t3.micro",
+            "kernel_id": "",
+            "key_name": "",
+            "latest_version": 1,
+            "license_specification": [],
+            "maintenance_options": [],
+            "metadata_options": [],
+            "monitoring": [],
+            "name": "clouddrive-backend-lt-2026061408484969240000000c",
+            "name_prefix": "clouddrive-backend-lt-",
+            "network_interfaces": [
+              {
+                "associate_carrier_ip_address": "",
+                "associate_public_ip_address": "false",
+                "connection_tracking_specification": [],
+                "delete_on_termination": "",
+                "description": "",
+                "device_index": 0,
+                "ena_srd_specification": [],
+                "interface_type": "",
+                "ipv4_address_count": 0,
+                "ipv4_addresses": [],
+                "ipv4_prefix_count": 0,
+                "ipv4_prefixes": [],
+                "ipv6_address_count": 0,
+                "ipv6_addresses": [],
+                "ipv6_prefix_count": 0,
+                "ipv6_prefixes": [],
+                "network_card_index": 0,
+                "network_interface_id": "",
+                "primary_ipv6": "",
+                "private_ip_address": "",
+                "security_groups": [
+                  "sg-000f456fcb81d552d"
+                ],
+                "subnet_id": ""
+              }
+            ],
+            "placement": [],
+            "private_dns_name_options": [],
+            "ram_disk_id": "",
+            "security_group_names": [],
+            "tag_specifications": [
+              {
+                "resource_type": "instance",
+                "tags": {
+                  "Name": "clouddrive-backend-instance"
+                }
+              }
+            ],
+            "tags": {
+              "Name": "clouddrive-backend-lt"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-backend-lt",
+              "Project": "clouddrive"
+            },
+            "update_default_version": null,
+            "user_data": "IyEvYmluL2Jhc2gKc2V0IC1lCgojIFVwZGF0ZSBhbmQgaW5zdGFsbCBEb2NrZXIgJiBBV1MgQ0xJCnl1bSB1cGRhdGUgLXkKYW1hem9uLWxpbnV4LWV4dHJhcyBpbnN0YWxsIGRvY2tlciAteQp5dW0gaW5zdGFsbCAteSBhd3MtY2xpIGpxCgojIFN0YXJ0IGFuZCBlbmFibGUgRG9ja2VyCnN5c3RlbWN0bCBzdGFydCBkb2NrZXIKc3lzdGVtY3RsIGVuYWJsZSBkb2NrZXIKCiMgQWRkIGVjMi11c2VyIHRvIGRvY2tlciBncm91cAp1c2VybW9kIC1hRyBkb2NrZXIgZWMyLXVzZXIKCiMgVmFyaWFibGVzIGluamVjdGVkIGJ5IFRlcnJhZm9ybQpSRUdJT049ImFwLXNvdXRoLTEiClBST0pFQ1Q9ImNsb3VkZHJpdmUiCkVDUl9SRVBPPSIxNjAyNDQ2OTM5MDguZGtyLmVjci5hcC1zb3V0aC0xLmFtYXpvbmF3cy5jb20vY2xvdWRkcml2ZS1iYWNrZW5kIgpTU01fUEFSQU09Ii9jbG91ZGRyaXZlL2JhY2tlbmQvaW1hZ2VfdGFnIgpTRUNSRVRfSUQ9ImFybjphd3M6c2VjcmV0c21hbmFnZXI6YXAtc291dGgtMToxNjAyNDQ2OTM5MDg6c2VjcmV0OmNsb3VkZHJpdmUvYmFja2VuZC9zZWNyZXRzLW93UWFlbiIKCiMgRmV0Y2ggaW5zdGFuY2UgbWV0YWRhdGEgZm9yIHVuaXF1ZSBsb2cgc3RyZWFtaW5nIChJTURTdjIpClRPS0VOPSQoY3VybCAtcyAtWCBQVVQgImh0dHA6Ly8xNjkuMjU0LjE2OS4yNTQvbGF0ZXN0L2FwaS90b2tlbiIgLUggIlgtYXdzLWVjMi1tZXRhZGF0YS10b2tlbi10dGwtc2Vjb25kczogMjE2MDAiKQpJTlNUQU5DRV9JRD0kKGN1cmwgLXMgLUggIlgtYXdzLWVjMi1tZXRhZGF0YS10b2tlbjogJFRPS0VOIiBodHRwOi8vMTY5LjI1NC4xNjkuMjU0L2xhdGVzdC9tZXRhLWRhdGEvaW5zdGFuY2UtaWQpCgojIENyZWF0ZSBhIHNlY3VyZSBkaXJlY3RvcnkgZm9yIGFwcGxpY2F0aW9uIHNlY3JldHMKbWtkaXIgLXAgL29wdC9jbG91ZGRyaXZlCmNobW9kIDcwMCAvb3B0L2Nsb3VkZHJpdmUKCiMgUmV0cmlldmUgcHJvZHVjdGlvbiBzZWNyZXRzIGZyb20gQVdTIFNlY3JldHMgTWFuYWdlcgojIFNlY3JldHMgYXJlIHN0b3JlZCBhcyBhIEpTT04gb2JqZWN0OyB3ZSBwYXJzZSB0aGVtIGludG8gYW4gZW52aXJvbm1lbnQgZmlsZQphd3Mgc2VjcmV0c21hbmFnZXIgZ2V0LXNlY3JldC12YWx1ZSAtLXNlY3JldC1pZCAkU0VDUkVUX0lEIC0tcmVnaW9uICRSRUdJT04gLS1xdWVyeSBTZWNyZXRTdHJpbmcgLS1vdXRwdXQgdGV4dCB8IGpxIC1yICd0b19lbnRyaWVzfG1hcCgiXCgua2V5KT1cKC52YWx1ZSkiKXwuW10nID4gL29wdC9jbG91ZGRyaXZlL2JhY2tlbmQuZW52CmNobW9kIDYwMCAvb3B0L2Nsb3VkZHJpdmUvYmFja2VuZC5lbnYKCiMgQXBwZW5kIGludGVybmFsIGxvYWQgYmFsYW5jZXIgdmFyaWFibGVzIG9yIGV4dHJhIGNvbmZpZ3VyYXRpb24gaWYgbmVlZGVkCmVjaG8gIlBPUlQ9MzAwMCIgPj4gL29wdC9jbG91ZGRyaXZlL2JhY2tlbmQuZW52CgojIEF1dGhlbnRpY2F0ZSB3aXRoIEFXUyBFQ1IKYXdzIGVjciBnZXQtbG9naW4tcGFzc3dvcmQgLS1yZWdpb24gJFJFR0lPTiB8IGRvY2tlciBsb2dpbiAtLXVzZXJuYW1lIEFXUyAtLXBhc3N3b3JkLXN0ZGluICRFQ1JfUkVQTwoKIyBHZXQgY3VycmVudCBjb250YWluZXIgdGFnIGZyb20gU1NNIFBhcmFtZXRlciBTdG9yZQpJTUFHRV9UQUc9JChhd3Mgc3NtIGdldC1wYXJhbWV0ZXIgLS1uYW1lICRTU01fUEFSQU0gLS1yZWdpb24gJFJFR0lPTiAtLXF1ZXJ5ICJQYXJhbWV0ZXIuVmFsdWUiIC0tb3V0cHV0IHRleHQpCgojIFN0b3AgYW5kIHJlbW92ZSBleGlzdGluZyBjb250YWluZXIgaWYgcnVubmluZwpkb2NrZXIgc3RvcCBiYWNrZW5kIHx8IHRydWUKZG9ja2VyIHJtIGJhY2tlbmQgfHwgdHJ1ZQoKIyBSdW4gdGhlIGJhY2tlbmQgY29udGFpbmVyCiMgVXNpbmcgdGhlIGF3c2xvZ3MgbG9nIGRyaXZlciByZWRpcmVjdHMgY29udGFpbmVyIHN0ZG91dC9zdGRlcnIgZGlyZWN0bHkgdG8gQ2xvdWRXYXRjaCBMb2dzCmRvY2tlciBydW4gLWQgXAogIC0tbmFtZSBiYWNrZW5kIFwKICAtLXJlc3RhcnQgdW5sZXNzLXN0b3BwZWQgXAogIC1wIDMwMDA6MzAwMCBcCiAgLS1lbnYtZmlsZSAvb3B0L2Nsb3VkZHJpdmUvYmFja2VuZC5lbnYgXAogIC0tbG9nLWRyaXZlcj1hd3Nsb2dzIFwKICAtLWxvZy1vcHQgYXdzbG9ncy1ncm91cD0vYXdzL2VjMi8kUFJPSkVDVC1iYWNrZW5kL2FwcCBcCiAgLS1sb2ctb3B0IGF3c2xvZ3MtcmVnaW9uPSRSRUdJT04gXAogIC0tbG9nLW9wdCBhd3Nsb2dzLXN0cmVhbT1pbnN0YW5jZS0kSU5TVEFOQ0VfSUQgXAogIC0tbG9nLW9wdCBhd3Nsb2dzLWNyZWF0ZS1ncm91cD10cnVlIFwKICAkRUNSX1JFUE86JElNQUdFX1RBRwoKIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQojIENsb3VkV2F0Y2ggQWdlbnQgQ29uZmlndXJhdGlvbiBmb3IgTWVtb3J5IGFuZCBEaXNrIE1vbml0b3JpbmcKIyAtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQp5dW0gaW5zdGFsbCBhbWF6b24tY2xvdWR3YXRjaC1hZ2VudCAteQoKY2F0IDw8RU9GID4gL29wdC9hd3MvYW1hem9uLWNsb3Vkd2F0Y2gtYWdlbnQvZXRjL2FtYXpvbi1jbG91ZHdhdGNoLWFnZW50Lmpzb24KewogICJhZ2VudCI6IHsKICAgICJtZXRyaWNzX2NvbGxlY3Rpb25faW50ZXJ2YWwiOiA2MCwKICAgICJydW5fYXNfdXNlciI6ICJjd2FnZW50IgogIH0sCiAgImxvZ3MiOiB7CiAgICAibG9nc19jb2xsZWN0ZWQiOiB7CiAgICAgICJmaWxlcyI6IHsKICAgICAgICAiY29sbGVjdF9saXN0IjogWwogICAgICAgICAgewogICAgICAgICAgICAiZmlsZV9wYXRoIjogIi92YXIvbG9nL21lc3NhZ2VzIiwKICAgICAgICAgICAgImxvZ19ncm91cF9uYW1lIjogIi9hd3MvZWMyLyRQUk9KRUNULWJhY2tlbmQvc3lzdGVtLW1lc3NhZ2VzIiwKICAgICAgICAgICAgImxvZ19zdHJlYW1fbmFtZSI6ICJ7aW5zdGFuY2VfaWR9IiwKICAgICAgICAgICAgInJldGVudGlvbl9pbl9kYXlzIjogNwogICAgICAgICAgfQogICAgICAgIF0KICAgICAgfQogICAgfQogIH0sCiAgIm1ldHJpY3MiOiB7CiAgICAibWV0cmljc19jb2xsZWN0ZWQiOiB7CiAgICAgICJtZW0iOiB7CiAgICAgICAgIm1lYXN1cmVtZW50IjogWwogICAgICAgICAgIm1lbV91c2VkX3BlcmNlbnQiCiAgICAgICAgXSwKICAgICAgICAibWV0cmljc19jb2xsZWN0aW9uX2ludGVydmFsIjogNjAKICAgICAgfSwKICAgICAgImRpc2siOiB7CiAgICAgICAgIm1lYXN1cmVtZW50IjogWwogICAgICAgICAgImRpc2tfdXNlZF9wZXJjZW50IgogICAgICAgIF0sCiAgICAgICAgInJlc291cmNlcyI6IFsKICAgICAgICAgICIvIgogICAgICAgIF0sCiAgICAgICAgIm1ldHJpY3NfY29sbGVjdGlvbl9pbnRlcnZhbCI6IDYwCiAgICAgIH0KICAgIH0KICB9Cn0KRU9GCgojIFN0YXJ0IENsb3VkV2F0Y2ggQWdlbnQKL29wdC9hd3MvYW1hem9uLWNsb3Vkd2F0Y2gtYWdlbnQvYmluL2FtYXpvbi1jbG91ZHdhdGNoLWFnZW50LWN0bCBcCiAgLWEgZmV0Y2gtY29uZmlnIFwKICAtbSBlYzIgXAogIC1zIFwKICAtYyBmaWxlOi9vcHQvYXdzL2FtYXpvbi1jbG91ZHdhdGNoLWFnZW50L2V0Yy9hbWF6b24tY2xvdWR3YXRjaC1hZ2VudC5qc29uCg==",
+            "vpc_security_group_ids": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_ecr_repository.backend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_secretsmanager_secret.backend_secrets",
+            "aws_security_group.backend_ec2",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_ssm_parameter.backend_image_tag",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_launch_template",
+      "name": "frontend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:launch-template/lt-0831708ca361099cc",
+            "block_device_mappings": [],
+            "capacity_reservation_specification": [],
+            "cpu_options": [],
+            "credit_specification": [],
+            "default_version": 1,
+            "description": "",
+            "disable_api_stop": false,
+            "disable_api_termination": false,
+            "ebs_optimized": "",
+            "elastic_gpu_specifications": [],
+            "elastic_inference_accelerator": [],
+            "enclave_options": [],
+            "hibernation_options": [],
+            "iam_instance_profile": [
+              {
+                "arn": "",
+                "name": "clouddrive-ec2-profile"
+              }
+            ],
+            "id": "lt-0831708ca361099cc",
+            "image_id": "ami-05726d1f069460e90",
+            "instance_initiated_shutdown_behavior": "",
+            "instance_market_options": [],
+            "instance_requirements": [],
+            "instance_type": "t3.micro",
+            "kernel_id": "",
+            "key_name": "",
+            "latest_version": 1,
+            "license_specification": [],
+            "maintenance_options": [],
+            "metadata_options": [],
+            "monitoring": [],
+            "name": "clouddrive-frontend-lt-2026061408514815370000000f",
+            "name_prefix": "clouddrive-frontend-lt-",
+            "network_interfaces": [
+              {
+                "associate_carrier_ip_address": "",
+                "associate_public_ip_address": "false",
+                "connection_tracking_specification": [],
+                "delete_on_termination": "",
+                "description": "",
+                "device_index": 0,
+                "ena_srd_specification": [],
+                "interface_type": "",
+                "ipv4_address_count": 0,
+                "ipv4_addresses": [],
+                "ipv4_prefix_count": 0,
+                "ipv4_prefixes": [],
+                "ipv6_address_count": 0,
+                "ipv6_addresses": [],
+                "ipv6_prefix_count": 0,
+                "ipv6_prefixes": [],
+                "network_card_index": 0,
+                "network_interface_id": "",
+                "primary_ipv6": "",
+                "private_ip_address": "",
+                "security_groups": [
+                  "sg-0d5eae2afbf27a88a"
+                ],
+                "subnet_id": ""
+              }
+            ],
+            "placement": [],
+            "private_dns_name_options": [],
+            "ram_disk_id": "",
+            "security_group_names": [],
+            "tag_specifications": [
+              {
+                "resource_type": "instance",
+                "tags": {
+                  "Name": "clouddrive-frontend-instance"
+                }
+              }
+            ],
+            "tags": {
+              "Name": "clouddrive-frontend-lt"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-frontend-lt",
+              "Project": "clouddrive"
+            },
+            "update_default_version": null,
+            "user_data": "IyEvYmluL2Jhc2gKc2V0IC1lCgojIFVwZGF0ZSBhbmQgaW5zdGFsbCBEb2NrZXIgJiBBV1MgQ0xJCnl1bSB1cGRhdGUgLXkKYW1hem9uLWxpbnV4LWV4dHJhcyBpbnN0YWxsIGRvY2tlciAteQp5dW0gaW5zdGFsbCAteSBhd3MtY2xpIGpxCgojIFN0YXJ0IGFuZCBlbmFibGUgRG9ja2VyCnN5c3RlbWN0bCBzdGFydCBkb2NrZXIKc3lzdGVtY3RsIGVuYWJsZSBkb2NrZXIKCiMgQWRkIGVjMi11c2VyIHRvIGRvY2tlciBncm91cAp1c2VybW9kIC1hRyBkb2NrZXIgZWMyLXVzZXIKCiMgVmFyaWFibGVzIGluamVjdGVkIGJ5IFRlcnJhZm9ybQpSRUdJT049ImFwLXNvdXRoLTEiClBST0pFQ1Q9ImNsb3VkZHJpdmUiCkVDUl9SRVBPPSIxNjAyNDQ2OTM5MDguZGtyLmVjci5hcC1zb3V0aC0xLmFtYXpvbmF3cy5jb20vY2xvdWRkcml2ZS1mcm9udGVuZCIKU1NNX1BBUkFNPSIvY2xvdWRkcml2ZS9mcm9udGVuZC9pbWFnZV90YWciCklOVEVSTkFMX0FMQj0iaW50ZXJuYWwtY2xvdWRkcml2ZS1pbnRlcm5hbC1hbGItMTAxODkxNzcyNC5hcC1zb3V0aC0xLmVsYi5hbWF6b25hd3MuY29tIgoKIyBGZXRjaCBpbnN0YW5jZSBtZXRhZGF0YSBmb3IgdW5pcXVlIGxvZyBzdHJlYW1pbmcgKElNRFN2MikKVE9LRU49JChjdXJsIC1zIC1YIFBVVCAiaHR0cDovLzE2OS4yNTQuMTY5LjI1NC9sYXRlc3QvYXBpL3Rva2VuIiAtSCAiWC1hd3MtZWMyLW1ldGFkYXRhLXRva2VuLXR0bC1zZWNvbmRzOiAyMTYwMCIpCklOU1RBTkNFX0lEPSQoY3VybCAtcyAtSCAiWC1hd3MtZWMyLW1ldGFkYXRhLXRva2VuOiAkVE9LRU4iIGh0dHA6Ly8xNjkuMjU0LjE2OS4yNTQvbGF0ZXN0L21ldGEtZGF0YS9pbnN0YW5jZS1pZCkKCiMgQXV0aGVudGljYXRlIHdpdGggQVdTIEVDUgphd3MgZWNyIGdldC1sb2dpbi1wYXNzd29yZCAtLXJlZ2lvbiAkUkVHSU9OIHwgZG9ja2VyIGxvZ2luIC0tdXNlcm5hbWUgQVdTIC0tcGFzc3dvcmQtc3RkaW4gJEVDUl9SRVBPCgojIEdldCBjdXJyZW50IGNvbnRhaW5lciB0YWcgZnJvbSBTU00gUGFyYW1ldGVyIFN0b3JlCklNQUdFX1RBRz0kKGF3cyBzc20gZ2V0LXBhcmFtZXRlciAtLW5hbWUgJFNTTV9QQVJBTSAtLXJlZ2lvbiAkUkVHSU9OIC0tcXVlcnkgIlBhcmFtZXRlci5WYWx1ZSIgLS1vdXRwdXQgdGV4dCkKCiMgU3RvcCBhbmQgcmVtb3ZlIGV4aXN0aW5nIGNvbnRhaW5lciBpZiBydW5uaW5nCmRvY2tlciBzdG9wIGZyb250ZW5kIHx8IHRydWUKZG9ja2VyIHJtIGZyb250ZW5kIHx8IHRydWUKCiMgUnVuIHRoZSBmcm9udGVuZCBjb250YWluZXIKIyBXZSBwYXNzIElOVEVSTkFMX0FMQl9ETlMgdG8gTmdpbnggc28gdGhhdCBpdCBjYW4gcmVzb2x2ZSB0aGUgSW50ZXJuYWwgQUxCIGZvciBBUEkgcmVxdWVzdHMKZG9ja2VyIHJ1biAtZCBcCiAgLS1uYW1lIGZyb250ZW5kIFwKICAtLXJlc3RhcnQgdW5sZXNzLXN0b3BwZWQgXAogIC1wIDgwOjgwIFwKICAtZSBJTlRFUk5BTF9BTEJfRE5TPSRJTlRFUk5BTF9BTEIgXAogIC0tbG9nLWRyaXZlcj1hd3Nsb2dzIFwKICAtLWxvZy1vcHQgYXdzbG9ncy1ncm91cD0vYXdzL2VjMi8kUFJPSkVDVC1mcm9udGVuZC9hcHAgXAogIC0tbG9nLW9wdCBhd3Nsb2dzLXJlZ2lvbj0kUkVHSU9OIFwKICAtLWxvZy1vcHQgYXdzbG9ncy1zdHJlYW09aW5zdGFuY2UtJElOU1RBTkNFX0lEIFwKICAtLWxvZy1vcHQgYXdzbG9ncy1jcmVhdGUtZ3JvdXA9dHJ1ZSBcCiAgJEVDUl9SRVBPOiRJTUFHRV9UQUcKCiMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KIyBDbG91ZFdhdGNoIEFnZW50IENvbmZpZ3VyYXRpb24gZm9yIE1lbW9yeSBhbmQgRGlzayBNb25pdG9yaW5nCiMgLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0KeXVtIGluc3RhbGwgYW1hem9uLWNsb3Vkd2F0Y2gtYWdlbnQgLXkKCmNhdCA8PEVPRiA+IC9vcHQvYXdzL2FtYXpvbi1jbG91ZHdhdGNoLWFnZW50L2V0Yy9hbWF6b24tY2xvdWR3YXRjaC1hZ2VudC5qc29uCnsKICAiYWdlbnQiOiB7CiAgICAibWV0cmljc19jb2xsZWN0aW9uX2ludGVydmFsIjogNjAsCiAgICAicnVuX2FzX3VzZXIiOiAiY3dhZ2VudCIKICB9LAogICJsb2dzIjogewogICAgImxvZ3NfY29sbGVjdGVkIjogewogICAgICAiZmlsZXMiOiB7CiAgICAgICAgImNvbGxlY3RfbGlzdCI6IFsKICAgICAgICAgIHsKICAgICAgICAgICAgImZpbGVfcGF0aCI6ICIvdmFyL2xvZy9tZXNzYWdlcyIsCiAgICAgICAgICAgICJsb2dfZ3JvdXBfbmFtZSI6ICIvYXdzL2VjMi8kUFJPSkVDVC1mcm9udGVuZC9zeXN0ZW0tbWVzc2FnZXMiLAogICAgICAgICAgICAibG9nX3N0cmVhbV9uYW1lIjogIntpbnN0YW5jZV9pZH0iLAogICAgICAgICAgICAicmV0ZW50aW9uX2luX2RheXMiOiA3CiAgICAgICAgICB9CiAgICAgICAgXQogICAgICB9CiAgICB9CiAgfSwKICAibWV0cmljcyI6IHsKICAgICJtZXRyaWNzX2NvbGxlY3RlZCI6IHsKICAgICAgIm1lbSI6IHsKICAgICAgICAibWVhc3VyZW1lbnQiOiBbCiAgICAgICAgICAibWVtX3VzZWRfcGVyY2VudCIKICAgICAgICBdLAogICAgICAgICJtZXRyaWNzX2NvbGxlY3Rpb25faW50ZXJ2YWwiOiA2MAogICAgICB9LAogICAgICAiZGlzayI6IHsKICAgICAgICAibWVhc3VyZW1lbnQiOiBbCiAgICAgICAgICAiZGlza191c2VkX3BlcmNlbnQiCiAgICAgICAgXSwKICAgICAgICAicmVzb3VyY2VzIjogWwogICAgICAgICAgIi8iCiAgICAgICAgXSwKICAgICAgICAibWV0cmljc19jb2xsZWN0aW9uX2ludGVydmFsIjogNjAKICAgICAgfQogICAgfQogIH0KfQpFT0YKCiMgU3RhcnQgQ2xvdWRXYXRjaCBBZ2VudAovb3B0L2F3cy9hbWF6b24tY2xvdWR3YXRjaC1hZ2VudC9iaW4vYW1hem9uLWNsb3Vkd2F0Y2gtYWdlbnQtY3RsIFwKICAtYSBmZXRjaC1jb25maWcgXAogIC1tIGVjMiBcCiAgLXMgXAogIC1jIGZpbGU6L29wdC9hd3MvYW1hem9uLWNsb3Vkd2F0Y2gtYWdlbnQvZXRjL2FtYXpvbi1jbG91ZHdhdGNoLWFnZW50Lmpzb24K",
+            "vpc_security_group_ids": []
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_ecr_repository.frontend",
+            "aws_iam_instance_profile.ec2_profile",
+            "aws_iam_role.ec2_role",
+            "aws_lb.internal",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_ssm_parameter.frontend_image_tag",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lb",
+      "name": "internal",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "access_logs": [
+              {
+                "bucket": "",
+                "enabled": false,
+                "prefix": ""
+              }
+            ],
+            "arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-internal-alb/2914e39ff36b96e1",
+            "arn_suffix": "app/clouddrive-internal-alb/2914e39ff36b96e1",
+            "client_keep_alive": 3600,
+            "connection_logs": [
+              {
+                "bucket": "",
+                "enabled": false,
+                "prefix": ""
+              }
+            ],
+            "customer_owned_ipv4_pool": "",
+            "desync_mitigation_mode": "defensive",
+            "dns_name": "internal-clouddrive-internal-alb-1018917724.ap-south-1.elb.amazonaws.com",
+            "dns_record_client_routing_policy": null,
+            "drop_invalid_header_fields": false,
+            "enable_cross_zone_load_balancing": true,
+            "enable_deletion_protection": false,
+            "enable_http2": true,
+            "enable_tls_version_and_cipher_suite_headers": false,
+            "enable_waf_fail_open": false,
+            "enable_xff_client_port": false,
+            "enable_zonal_shift": false,
+            "enforce_security_group_inbound_rules_on_private_link_traffic": "",
+            "id": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-internal-alb/2914e39ff36b96e1",
+            "idle_timeout": 60,
+            "internal": true,
+            "ip_address_type": "ipv4",
+            "ipam_pools": [],
+            "load_balancer_type": "application",
+            "minimum_load_balancer_capacity": [],
+            "name": "clouddrive-internal-alb",
+            "name_prefix": "",
+            "preserve_host_header": false,
+            "security_groups": [
+              "sg-074612495f3c2abaa"
+            ],
+            "subnet_mapping": [
+              {
+                "allocation_id": "",
+                "ipv6_address": "",
+                "outpost_id": "",
+                "private_ipv4_address": "",
+                "subnet_id": "subnet-063c81f0e08cf5b7e"
+              },
+              {
+                "allocation_id": "",
+                "ipv6_address": "",
+                "outpost_id": "",
+                "private_ipv4_address": "",
+                "subnet_id": "subnet-091119a599a807fdc"
+              }
+            ],
+            "subnets": [
+              "subnet-063c81f0e08cf5b7e",
+              "subnet-091119a599a807fdc"
+            ],
+            "tags": {
+              "Name": "clouddrive-internal-alb"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-internal-alb",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639",
+            "xff_header_processing_mode": "append",
+            "zone_id": "ZP97RAFLXTNZK"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lb",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "access_logs": [
+              {
+                "bucket": "",
+                "enabled": false,
+                "prefix": ""
+              }
+            ],
+            "arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-public-alb/faea3dff392b226f",
+            "arn_suffix": "app/clouddrive-public-alb/faea3dff392b226f",
+            "client_keep_alive": 3600,
+            "connection_logs": [
+              {
+                "bucket": "",
+                "enabled": false,
+                "prefix": ""
+              }
+            ],
+            "customer_owned_ipv4_pool": "",
+            "desync_mitigation_mode": "defensive",
+            "dns_name": "clouddrive-public-alb-708378797.ap-south-1.elb.amazonaws.com",
+            "dns_record_client_routing_policy": null,
+            "drop_invalid_header_fields": false,
+            "enable_cross_zone_load_balancing": true,
+            "enable_deletion_protection": false,
+            "enable_http2": true,
+            "enable_tls_version_and_cipher_suite_headers": false,
+            "enable_waf_fail_open": false,
+            "enable_xff_client_port": false,
+            "enable_zonal_shift": false,
+            "enforce_security_group_inbound_rules_on_private_link_traffic": "",
+            "id": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-public-alb/faea3dff392b226f",
+            "idle_timeout": 60,
+            "internal": false,
+            "ip_address_type": "ipv4",
+            "ipam_pools": [],
+            "load_balancer_type": "application",
+            "minimum_load_balancer_capacity": [],
+            "name": "clouddrive-public-alb",
+            "name_prefix": "",
+            "preserve_host_header": false,
+            "security_groups": [
+              "sg-07bf0ec5adcb5aa27"
+            ],
+            "subnet_mapping": [
+              {
+                "allocation_id": "",
+                "ipv6_address": "",
+                "outpost_id": "",
+                "private_ipv4_address": "",
+                "subnet_id": "subnet-0995fa17d8accb622"
+              },
+              {
+                "allocation_id": "",
+                "ipv6_address": "",
+                "outpost_id": "",
+                "private_ipv4_address": "",
+                "subnet_id": "subnet-0e3f5d754e795dfe2"
+              }
+            ],
+            "subnets": [
+              "subnet-0995fa17d8accb622",
+              "subnet-0e3f5d754e795dfe2"
+            ],
+            "tags": {
+              "Name": "clouddrive-public-alb"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-public-alb",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639",
+            "xff_header_processing_mode": "append",
+            "zone_id": "ZP97RAFLXTNZK"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6NjAwMDAwMDAwMDAwLCJ1cGRhdGUiOjYwMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_security_group.public_alb",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lb_listener",
+      "name": "internal_http",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "alpn_policy": null,
+            "arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:listener/app/clouddrive-internal-alb/2914e39ff36b96e1/8b2d4e99a036ec0e",
+            "certificate_arn": null,
+            "default_action": [
+              {
+                "authenticate_cognito": [],
+                "authenticate_oidc": [],
+                "fixed_response": [],
+                "forward": [],
+                "order": 1,
+                "redirect": [],
+                "target_group_arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-backend-tg/78946ffe3a186ac3",
+                "type": "forward"
+              }
+            ],
+            "id": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:listener/app/clouddrive-internal-alb/2914e39ff36b96e1/8b2d4e99a036ec0e",
+            "load_balancer_arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-internal-alb/2914e39ff36b96e1",
+            "mutual_authentication": [],
+            "port": 80,
+            "protocol": "HTTP",
+            "routing_http_request_x_amzn_mtls_clientcert_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_issuer_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_leaf_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_subject_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_validity_header_name": null,
+            "routing_http_request_x_amzn_tls_cipher_suite_header_name": null,
+            "routing_http_request_x_amzn_tls_version_header_name": null,
+            "routing_http_response_access_control_allow_credentials_header_value": "",
+            "routing_http_response_access_control_allow_headers_header_value": "",
+            "routing_http_response_access_control_allow_methods_header_value": "",
+            "routing_http_response_access_control_allow_origin_header_value": "",
+            "routing_http_response_access_control_expose_headers_header_value": "",
+            "routing_http_response_access_control_max_age_header_value": "",
+            "routing_http_response_content_security_policy_header_value": "",
+            "routing_http_response_server_enabled": true,
+            "routing_http_response_strict_transport_security_header_value": "",
+            "routing_http_response_x_content_type_options_header_value": "",
+            "routing_http_response_x_frame_options_header_value": "",
+            "ssl_policy": "",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "tcp_idle_timeout_seconds": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsInVwZGF0ZSI6MzAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "aws_lb.internal",
+            "aws_lb_target_group.backend",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lb_listener",
+      "name": "public_http",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "alpn_policy": null,
+            "arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:listener/app/clouddrive-public-alb/faea3dff392b226f/585048c2167fd8dd",
+            "certificate_arn": null,
+            "default_action": [
+              {
+                "authenticate_cognito": [],
+                "authenticate_oidc": [],
+                "fixed_response": [],
+                "forward": [],
+                "order": 1,
+                "redirect": [],
+                "target_group_arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-frontend-tg/055884439bbb940a",
+                "type": "forward"
+              }
+            ],
+            "id": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:listener/app/clouddrive-public-alb/faea3dff392b226f/585048c2167fd8dd",
+            "load_balancer_arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-public-alb/faea3dff392b226f",
+            "mutual_authentication": [],
+            "port": 80,
+            "protocol": "HTTP",
+            "routing_http_request_x_amzn_mtls_clientcert_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_issuer_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_leaf_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_serial_number_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_subject_header_name": null,
+            "routing_http_request_x_amzn_mtls_clientcert_validity_header_name": null,
+            "routing_http_request_x_amzn_tls_cipher_suite_header_name": null,
+            "routing_http_request_x_amzn_tls_version_header_name": null,
+            "routing_http_response_access_control_allow_credentials_header_value": "",
+            "routing_http_response_access_control_allow_headers_header_value": "",
+            "routing_http_response_access_control_allow_methods_header_value": "",
+            "routing_http_response_access_control_allow_origin_header_value": "",
+            "routing_http_response_access_control_expose_headers_header_value": "",
+            "routing_http_response_access_control_max_age_header_value": "",
+            "routing_http_response_content_security_policy_header_value": "",
+            "routing_http_response_server_enabled": true,
+            "routing_http_response_strict_transport_security_header_value": "",
+            "routing_http_response_x_content_type_options_header_value": "",
+            "routing_http_response_x_frame_options_header_value": "",
+            "ssl_policy": "",
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "tcp_idle_timeout_seconds": null,
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsInVwZGF0ZSI6MzAwMDAwMDAwMDAwfX0=",
+          "dependencies": [
+            "aws_lb.public",
+            "aws_lb_target_group.frontend",
+            "aws_security_group.public_alb",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lb_target_group",
+      "name": "backend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-backend-tg/78946ffe3a186ac3",
+            "arn_suffix": "targetgroup/clouddrive-backend-tg/78946ffe3a186ac3",
+            "connection_termination": null,
+            "deregistration_delay": "300",
+            "health_check": [
+              {
+                "enabled": true,
+                "healthy_threshold": 2,
+                "interval": 15,
+                "matcher": "200",
+                "path": "/api/v1/healthcheck",
+                "port": "3000",
+                "protocol": "HTTP",
+                "timeout": 5,
+                "unhealthy_threshold": 3
+              }
+            ],
+            "id": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-backend-tg/78946ffe3a186ac3",
+            "ip_address_type": "ipv4",
+            "lambda_multi_value_headers_enabled": false,
+            "load_balancer_arns": [
+              "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-internal-alb/2914e39ff36b96e1"
+            ],
+            "load_balancing_algorithm_type": "round_robin",
+            "load_balancing_anomaly_mitigation": "off",
+            "load_balancing_cross_zone_enabled": "use_load_balancer_configuration",
+            "name": "clouddrive-backend-tg",
+            "name_prefix": "",
+            "port": 3000,
+            "preserve_client_ip": null,
+            "protocol": "HTTP",
+            "protocol_version": "HTTP1",
+            "proxy_protocol_v2": false,
+            "slow_start": 0,
+            "stickiness": [
+              {
+                "cookie_duration": 86400,
+                "cookie_name": "",
+                "enabled": false,
+                "type": "lb_cookie"
+              }
+            ],
+            "tags": {
+              "Name": "clouddrive-backend-tg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-backend-tg",
+              "Project": "clouddrive"
+            },
+            "target_failover": [
+              {
+                "on_deregistration": null,
+                "on_unhealthy": null
+              }
+            ],
+            "target_group_health": [
+              {
+                "dns_failover": [
+                  {
+                    "minimum_healthy_targets_count": "1",
+                    "minimum_healthy_targets_percentage": "off"
+                  }
+                ],
+                "unhealthy_state_routing": [
+                  {
+                    "minimum_healthy_targets_count": 1,
+                    "minimum_healthy_targets_percentage": "off"
+                  }
+                ]
+              }
+            ],
+            "target_health_state": [
+              {
+                "enable_unhealthy_connection_termination": null,
+                "unhealthy_draining_interval": null
+              }
+            ],
+            "target_type": "instance",
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_vpc.main"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_lb_target_group",
+      "name": "frontend",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-frontend-tg/055884439bbb940a",
+            "arn_suffix": "targetgroup/clouddrive-frontend-tg/055884439bbb940a",
+            "connection_termination": null,
+            "deregistration_delay": "300",
+            "health_check": [
+              {
+                "enabled": true,
+                "healthy_threshold": 3,
+                "interval": 30,
+                "matcher": "200",
+                "path": "/",
+                "port": "80",
+                "protocol": "HTTP",
+                "timeout": 5,
+                "unhealthy_threshold": 3
+              }
+            ],
+            "id": "arn:aws:elasticloadbalancing:ap-south-1:160244693908:targetgroup/clouddrive-frontend-tg/055884439bbb940a",
+            "ip_address_type": "ipv4",
+            "lambda_multi_value_headers_enabled": false,
+            "load_balancer_arns": [
+              "arn:aws:elasticloadbalancing:ap-south-1:160244693908:loadbalancer/app/clouddrive-public-alb/faea3dff392b226f"
+            ],
+            "load_balancing_algorithm_type": "round_robin",
+            "load_balancing_anomaly_mitigation": "off",
+            "load_balancing_cross_zone_enabled": "use_load_balancer_configuration",
+            "name": "clouddrive-frontend-tg",
+            "name_prefix": "",
+            "port": 80,
+            "preserve_client_ip": null,
+            "protocol": "HTTP",
+            "protocol_version": "HTTP1",
+            "proxy_protocol_v2": false,
+            "slow_start": 0,
+            "stickiness": [
+              {
+                "cookie_duration": 86400,
+                "cookie_name": "",
+                "enabled": false,
+                "type": "lb_cookie"
+              }
+            ],
+            "tags": {
+              "Name": "clouddrive-frontend-tg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-frontend-tg",
+              "Project": "clouddrive"
+            },
+            "target_failover": [
+              {
+                "on_deregistration": null,
+                "on_unhealthy": null
+              }
+            ],
+            "target_group_health": [
+              {
+                "dns_failover": [
+                  {
+                    "minimum_healthy_targets_count": "1",
+                    "minimum_healthy_targets_percentage": "off"
+                  }
+                ],
+                "unhealthy_state_routing": [
+                  {
+                    "minimum_healthy_targets_count": 1,
+                    "minimum_healthy_targets_percentage": "off"
+                  }
+                ]
+              }
+            ],
+            "target_health_state": [
+              {
+                "enable_unhealthy_connection_termination": null,
+                "unhealthy_draining_interval": null
+              }
+            ],
+            "target_type": "instance",
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_vpc.main"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route",
+      "name": "private_nat_instance",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "carrier_gateway_id": "",
+            "core_network_arn": "",
+            "destination_cidr_block": "0.0.0.0/0",
+            "destination_ipv6_cidr_block": "",
+            "destination_prefix_list_id": "",
+            "egress_only_gateway_id": "",
+            "gateway_id": "",
+            "id": "r-rtb-0d72d20a547c486cd1080289494",
+            "instance_id": "i-0eac523958a1ecab5",
+            "instance_owner_id": "160244693908",
+            "local_gateway_id": "",
+            "nat_gateway_id": "",
+            "network_interface_id": "eni-0933fd9a752b14b5b",
+            "origin": "CreateRoute",
+            "route_table_id": "rtb-0d72d20a547c486cd",
+            "state": "active",
+            "timeouts": null,
+            "transit_gateway_id": "",
+            "vpc_endpoint_id": "",
+            "vpc_peering_connection_id": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_instance.nat_instance",
+            "aws_route_table.private",
+            "aws_security_group.nat",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "carrier_gateway_id": "",
+            "core_network_arn": "",
+            "destination_cidr_block": "0.0.0.0/0",
+            "destination_ipv6_cidr_block": "",
+            "destination_prefix_list_id": "",
+            "egress_only_gateway_id": "",
+            "gateway_id": "",
+            "id": "r-rtb-055ae1ca4e3e6ba581080289494",
+            "instance_id": "i-0eac523958a1ecab5",
+            "instance_owner_id": "160244693908",
+            "local_gateway_id": "",
+            "nat_gateway_id": "",
+            "network_interface_id": "eni-0933fd9a752b14b5b",
+            "origin": "CreateRoute",
+            "route_table_id": "rtb-055ae1ca4e3e6ba58",
+            "state": "active",
+            "timeouts": null,
+            "transit_gateway_id": "",
+            "vpc_endpoint_id": "",
+            "vpc_peering_connection_id": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_instance.nat_instance",
+            "aws_route_table.private",
+            "aws_security_group.nat",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_ami.amazon_linux_2",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "db",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:route-table/rtb-0f046bd8e8ccdd086",
+            "id": "rtb-0f046bd8e8ccdd086",
+            "owner_id": "160244693908",
+            "propagating_vgws": [],
+            "route": [],
+            "tags": {
+              "Name": "clouddrive-db-rt"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-db-rt",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "private",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:route-table/rtb-0d72d20a547c486cd",
+            "id": "rtb-0d72d20a547c486cd",
+            "owner_id": "160244693908",
+            "propagating_vgws": [],
+            "route": [
+              {
+                "carrier_gateway_id": "",
+                "cidr_block": "0.0.0.0/0",
+                "core_network_arn": "",
+                "destination_prefix_list_id": "",
+                "egress_only_gateway_id": "",
+                "gateway_id": "",
+                "ipv6_cidr_block": "",
+                "local_gateway_id": "",
+                "nat_gateway_id": "",
+                "network_interface_id": "eni-0933fd9a752b14b5b",
+                "transit_gateway_id": "",
+                "vpc_endpoint_id": "",
+                "vpc_peering_connection_id": ""
+              }
+            ],
+            "tags": {
+              "Name": "clouddrive-private-rt-1"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-private-rt-1",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_vpc.main"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:route-table/rtb-055ae1ca4e3e6ba58",
+            "id": "rtb-055ae1ca4e3e6ba58",
+            "owner_id": "160244693908",
+            "propagating_vgws": [],
+            "route": [
+              {
+                "carrier_gateway_id": "",
+                "cidr_block": "0.0.0.0/0",
+                "core_network_arn": "",
+                "destination_prefix_list_id": "",
+                "egress_only_gateway_id": "",
+                "gateway_id": "",
+                "ipv6_cidr_block": "",
+                "local_gateway_id": "",
+                "nat_gateway_id": "",
+                "network_interface_id": "eni-0933fd9a752b14b5b",
+                "transit_gateway_id": "",
+                "vpc_endpoint_id": "",
+                "vpc_peering_connection_id": ""
+              }
+            ],
+            "tags": {
+              "Name": "clouddrive-private-rt-2"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-private-rt-2",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:route-table/rtb-006b3a92b0f8839ae",
+            "id": "rtb-006b3a92b0f8839ae",
+            "owner_id": "160244693908",
+            "propagating_vgws": [],
+            "route": [
+              {
+                "carrier_gateway_id": "",
+                "cidr_block": "0.0.0.0/0",
+                "core_network_arn": "",
+                "destination_prefix_list_id": "",
+                "egress_only_gateway_id": "",
+                "gateway_id": "igw-020515be22d1da389",
+                "ipv6_cidr_block": "",
+                "local_gateway_id": "",
+                "nat_gateway_id": "",
+                "network_interface_id": "",
+                "transit_gateway_id": "",
+                "vpc_endpoint_id": "",
+                "vpc_peering_connection_id": ""
+              }
+            ],
+            "tags": {
+              "Name": "clouddrive-public-rt"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-public-rt",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_internet_gateway.igw",
+            "aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "private_app",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-0889531784eb766f4",
+            "route_table_id": "rtb-0d72d20a547c486cd",
+            "subnet_id": "subnet-063c81f0e08cf5b7e",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_route_table.private",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-0e814c242dd7c4285",
+            "route_table_id": "rtb-055ae1ca4e3e6ba58",
+            "subnet_id": "subnet-091119a599a807fdc",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_route_table.private",
+            "aws_subnet.private_app",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "private_db",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-0a3af4cb1c04c53da",
+            "route_table_id": "rtb-0f046bd8e8ccdd086",
+            "subnet_id": "subnet-0a1c5dc49c6263290",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_route_table.db",
+            "aws_subnet.private_db",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-02240743931e0140d",
+            "route_table_id": "rtb-0f046bd8e8ccdd086",
+            "subnet_id": "subnet-0f0d300162eb23d3b",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_route_table.db",
+            "aws_subnet.private_db",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_route_table_association",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-02c7764788c0c22b5",
+            "route_table_id": "rtb-006b3a92b0f8839ae",
+            "subnet_id": "subnet-0995fa17d8accb622",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_internet_gateway.igw",
+            "aws_route_table.public",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 0,
+          "attributes": {
+            "gateway_id": "",
+            "id": "rtbassoc-0dfb53e70131176ea",
+            "route_table_id": "rtb-006b3a92b0f8839ae",
+            "subnet_id": "subnet-0e3f5d754e795dfe2",
+            "timeouts": null
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjozMDAwMDAwMDAwMDAsImRlbGV0ZSI6MzAwMDAwMDAwMDAwLCJ1cGRhdGUiOjEyMDAwMDAwMDAwMH19",
+          "dependencies": [
+            "aws_internet_gateway.igw",
+            "aws_route_table.public",
+            "aws_subnet.public",
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_secretsmanager_secret",
+      "name": "backend_secrets",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:secretsmanager:ap-south-1:160244693908:secret:clouddrive/backend/secrets-owQaen",
+            "description": "Production environment variables and credentials for Backend",
+            "force_overwrite_replica_secret": false,
+            "id": "arn:aws:secretsmanager:ap-south-1:160244693908:secret:clouddrive/backend/secrets-owQaen",
+            "kms_key_id": "",
+            "name": "clouddrive/backend/secrets",
+            "name_prefix": "",
+            "policy": "",
+            "recovery_window_in_days": 0,
+            "replica": [],
+            "tags": {
+              "Name": "clouddrive-backend-secrets"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-backend-secrets",
+              "Project": "clouddrive"
+            }
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_secretsmanager_secret_version",
+      "name": "backend_placeholder",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "arn": "arn:aws:secretsmanager:ap-south-1:160244693908:secret:clouddrive/backend/secrets-owQaen",
+            "has_secret_string_wo": null,
+            "id": "arn:aws:secretsmanager:ap-south-1:160244693908:secret:clouddrive/backend/secrets-owQaen|terraform-20260614084825126900000002",
+            "secret_binary": "",
+            "secret_id": "arn:aws:secretsmanager:ap-south-1:160244693908:secret:clouddrive/backend/secrets-owQaen",
+            "secret_string": "{\"ACCESS_TOKEN_EXPIRY\":\"1d\",\"ACCESS_TOKEN_SECRET\":\"placeholder_long_jwt_secret_value_for_production\",\"AWS_REGION\":\"ap-south-1\",\"AWS_S3_BUCKET\":\"clouddrive-s3-bucket\",\"CORS_ORIGIN\":\"http://localhost:5173\",\"MONGO_URI\":\"mongodb+srv://clouddrive:Manvadind8962@cluster0.pdtpgzv.mongodb.net/clouddrive\",\"SES_FROM_EMAIL\":\"aryanpatel8082@gmail.com\"}",
+            "secret_string_wo": null,
+            "secret_string_wo_version": null,
+            "version_id": "terraform-20260614084825126900000002",
+            "version_stages": [
+              "AWSCURRENT"
+            ]
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "secret_binary"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "secret_string"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "secret_string_wo"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_secretsmanager_secret.backend_secrets"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "backend_ec2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:security-group/sg-000f456fcb81d552d",
+            "description": "Security group for Backend EC2 Instances",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "Allow all outbound traffic (ECR, MongoDB Atlas, SES, S3, Secrets Manager)",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-000f456fcb81d552d",
+            "ingress": [
+              {
+                "cidr_blocks": [],
+                "description": "Port 3000 from Internal ALB only",
+                "from_port": 3000,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [
+                  "sg-074612495f3c2abaa"
+                ],
+                "self": false,
+                "to_port": 3000
+              },
+              {
+                "cidr_blocks": [],
+                "description": "SSH from Bastion Host only",
+                "from_port": 22,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [
+                  "sg-02716db332fad0b2b"
+                ],
+                "self": false,
+                "to_port": 22
+              }
+            ],
+            "name": "clouddrive-backend-ec2-sg",
+            "name_prefix": "",
+            "owner_id": "160244693908",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "clouddrive-backend-ec2-sg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-backend-ec2-sg",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_vpc.main"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "bastion",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:security-group/sg-02716db332fad0b2b",
+            "description": "Allow SSH access to Bastion host",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "10.0.10.0/24",
+                  "10.0.11.0/24"
+                ],
+                "description": "SSH outbound to Frontend and Backend EC2s",
+                "from_port": 22,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 22
+              }
+            ],
+            "id": "sg-02716db332fad0b2b",
+            "ingress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "SSH from allowed IP ranges",
+                "from_port": 22,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 22
+              }
+            ],
+            "name": "clouddrive-bastion-sg",
+            "name_prefix": "",
+            "owner_id": "160244693908",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "clouddrive-bastion-sg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-bastion-sg",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_vpc.main"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "database",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:security-group/sg-073183909da461893",
+            "description": "Security group for private database layer",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "Restrict outbound database traffic",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-073183909da461893",
+            "ingress": [
+              {
+                "cidr_blocks": [],
+                "description": "Allow database connections from Backend EC2 instances only",
+                "from_port": 27017,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [
+                  "sg-000f456fcb81d552d"
+                ],
+                "self": false,
+                "to_port": 27017
+              }
+            ],
+            "name": "clouddrive-database-sg",
+            "name_prefix": "",
+            "owner_id": "160244693908",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "clouddrive-database-sg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-database-sg",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_security_group.backend_ec2",
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.internal_alb",
+            "aws_security_group.public_alb",
+            "aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "frontend_ec2",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:security-group/sg-0d5eae2afbf27a88a",
+            "description": "Security group for Frontend EC2 Instances",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "Allow all outbound traffic (ECR, CloudWatch, Systems Manager, Internal ALB)",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-0d5eae2afbf27a88a",
+            "ingress": [
+              {
+                "cidr_blocks": [],
+                "description": "HTTP from Public ALB only",
+                "from_port": 80,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [
+                  "sg-07bf0ec5adcb5aa27"
+                ],
+                "self": false,
+                "to_port": 80
+              },
+              {
+                "cidr_blocks": [],
+                "description": "SSH from Bastion Host only",
+                "from_port": 22,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [
+                  "sg-02716db332fad0b2b"
+                ],
+                "self": false,
+                "to_port": 22
+              }
+            ],
+            "name": "clouddrive-frontend-ec2-sg",
+            "name_prefix": "",
+            "owner_id": "160244693908",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "clouddrive-frontend-ec2-sg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-frontend-ec2-sg",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_security_group.bastion",
+            "aws_security_group.public_alb",
+            "aws_vpc.main"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "internal_alb",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:security-group/sg-074612495f3c2abaa",
+            "description": "Security group for Internal Load Balancer",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "10.0.10.0/24",
+                  "10.0.11.0/24"
+                ],
+                "description": "Allow outbound to Backend EC2 instances on port 3000",
+                "from_port": 3000,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 3000
+              }
+            ],
+            "id": "sg-074612495f3c2abaa",
+            "ingress": [
+              {
+                "cidr_blocks": [],
+                "description": "HTTP from Frontend EC2 instances only",
+                "from_port": 80,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [
+                  "sg-0d5eae2afbf27a88a"
+                ],
+                "self": false,
+                "to_port": 80
+              }
+            ],
+            "name": "clouddrive-internal-alb-sg",
+            "name_prefix": "",
+            "owner_id": "160244693908",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "clouddrive-internal-alb-sg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-internal-alb-sg",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_security_group.bastion",
+            "aws_security_group.frontend_ec2",
+            "aws_security_group.public_alb",
+            "aws_vpc.main"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "nat",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:security-group/sg-049ab25672d17eb00",
+            "description": "Security Group for NAT Instance",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "id": "sg-049ab25672d17eb00",
+            "ingress": [
+              {
+                "cidr_blocks": [
+                  "10.0.10.0/24",
+                  "10.0.11.0/24",
+                  "10.0.20.0/24",
+                  "10.0.21.0/24"
+                ],
+                "description": "",
+                "from_port": 0,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "-1",
+                "security_groups": [],
+                "self": false,
+                "to_port": 0
+              }
+            ],
+            "name": "clouddrive-nat-sg",
+            "name_prefix": "",
+            "owner_id": "160244693908",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "clouddrive-nat-sg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-nat-sg",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_vpc.main"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "public_alb",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:security-group/sg-07bf0ec5adcb5aa27",
+            "description": "Security group for Internet-facing Application Load Balancer",
+            "egress": [
+              {
+                "cidr_blocks": [
+                  "10.0.10.0/24",
+                  "10.0.11.0/24"
+                ],
+                "description": "Allow outbound HTTP traffic to Frontend EC2 instances",
+                "from_port": 80,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 80
+              }
+            ],
+            "id": "sg-07bf0ec5adcb5aa27",
+            "ingress": [
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "HTTP from anywhere",
+                "from_port": 80,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 80
+              },
+              {
+                "cidr_blocks": [
+                  "0.0.0.0/0"
+                ],
+                "description": "HTTPS from anywhere",
+                "from_port": 443,
+                "ipv6_cidr_blocks": [],
+                "prefix_list_ids": [],
+                "protocol": "tcp",
+                "security_groups": [],
+                "self": false,
+                "to_port": 443
+              }
+            ],
+            "name": "clouddrive-public-alb-sg",
+            "name_prefix": "",
+            "owner_id": "160244693908",
+            "revoke_rules_on_delete": false,
+            "tags": {
+              "Name": "clouddrive-public-alb-sg"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-public-alb-sg",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6OTAwMDAwMDAwMDAwfSwic2NoZW1hX3ZlcnNpb24iOiIxIn0=",
+          "dependencies": [
+            "aws_vpc.main"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_sns_topic",
+      "name": "alerts",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "application_failure_feedback_role_arn": "",
+            "application_success_feedback_role_arn": "",
+            "application_success_feedback_sample_rate": 0,
+            "archive_policy": "",
+            "arn": "arn:aws:sns:ap-south-1:160244693908:clouddrive-alerts-topic",
+            "beginning_archive_time": "",
+            "content_based_deduplication": false,
+            "delivery_policy": "",
+            "display_name": "",
+            "fifo_throughput_scope": "",
+            "fifo_topic": false,
+            "firehose_failure_feedback_role_arn": "",
+            "firehose_success_feedback_role_arn": "",
+            "firehose_success_feedback_sample_rate": 0,
+            "http_failure_feedback_role_arn": "",
+            "http_success_feedback_role_arn": "",
+            "http_success_feedback_sample_rate": 0,
+            "id": "arn:aws:sns:ap-south-1:160244693908:clouddrive-alerts-topic",
+            "kms_master_key_id": "",
+            "lambda_failure_feedback_role_arn": "",
+            "lambda_success_feedback_role_arn": "",
+            "lambda_success_feedback_sample_rate": 0,
+            "name": "clouddrive-alerts-topic",
+            "name_prefix": "",
+            "owner": "160244693908",
+            "policy": "{\"Id\":\"__default_policy_ID\",\"Statement\":[{\"Action\":[\"SNS:GetTopicAttributes\",\"SNS:SetTopicAttributes\",\"SNS:AddPermission\",\"SNS:RemovePermission\",\"SNS:DeleteTopic\",\"SNS:Subscribe\",\"SNS:ListSubscriptionsByTopic\",\"SNS:Publish\"],\"Condition\":{\"StringEquals\":{\"AWS:SourceOwner\":\"160244693908\"}},\"Effect\":\"Allow\",\"Principal\":{\"AWS\":\"*\"},\"Resource\":\"arn:aws:sns:ap-south-1:160244693908:clouddrive-alerts-topic\",\"Sid\":\"__default_statement_ID\"}],\"Version\":\"2008-10-17\"}",
+            "signature_version": 0,
+            "sqs_failure_feedback_role_arn": "",
+            "sqs_success_feedback_role_arn": "",
+            "sqs_success_feedback_sample_rate": 0,
+            "tags": {
+              "Name": "clouddrive-alerts-topic"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-alerts-topic",
+              "Project": "clouddrive"
+            },
+            "tracing_config": ""
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "bnVsbA=="
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_ssm_parameter",
+      "name": "backend_image_tag",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "allowed_pattern": "",
+            "arn": "arn:aws:ssm:ap-south-1:160244693908:parameter/clouddrive/backend/image_tag",
+            "data_type": "text",
+            "description": "The image tag currently deployed for the backend",
+            "has_value_wo": null,
+            "id": "/clouddrive/backend/image_tag",
+            "insecure_value": null,
+            "key_id": "",
+            "name": "/clouddrive/backend/image_tag",
+            "overwrite": null,
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "tier": "Standard",
+            "type": "String",
+            "value": "655a7df523cfdd7a3cb4dacdc732e8613548531a",
+            "value_wo": null,
+            "value_wo_version": null,
+            "version": 4
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "value"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "value_wo"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_ssm_parameter",
+      "name": "frontend_image_tag",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "allowed_pattern": "",
+            "arn": "arn:aws:ssm:ap-south-1:160244693908:parameter/clouddrive/frontend/image_tag",
+            "data_type": "text",
+            "description": "The image tag currently deployed for the frontend",
+            "has_value_wo": null,
+            "id": "/clouddrive/frontend/image_tag",
+            "insecure_value": null,
+            "key_id": "",
+            "name": "/clouddrive/frontend/image_tag",
+            "overwrite": null,
+            "tags": {},
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Project": "clouddrive"
+            },
+            "tier": "Standard",
+            "type": "String",
+            "value": "655a7df523cfdd7a3cb4dacdc732e8613548531a",
+            "value_wo": null,
+            "value_wo_version": null,
+            "version": 4
+          },
+          "sensitive_attributes": [
+            [
+              {
+                "type": "get_attr",
+                "value": "value"
+              }
+            ],
+            [
+              {
+                "type": "get_attr",
+                "value": "value_wo"
+              }
+            ]
+          ],
+          "identity_schema_version": 0,
+          "private": "bnVsbA==",
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "private_app",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:subnet/subnet-063c81f0e08cf5b7e",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1a",
+            "availability_zone_id": "aps1-az1",
+            "cidr_block": "10.0.10.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-063c81f0e08cf5b7e",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "160244693908",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "clouddrive-private-app-subnet-1"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-private-app-subnet-1",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ],
+          "create_before_destroy": true
+        },
+        {
+          "index_key": 1,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:subnet/subnet-091119a599a807fdc",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1b",
+            "availability_zone_id": "aps1-az3",
+            "cidr_block": "10.0.11.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-091119a599a807fdc",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "160244693908",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "clouddrive-private-app-subnet-2"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-private-app-subnet-2",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ],
+          "create_before_destroy": true
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "private_db",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:subnet/subnet-0a1c5dc49c6263290",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1a",
+            "availability_zone_id": "aps1-az1",
+            "cidr_block": "10.0.20.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-0a1c5dc49c6263290",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "160244693908",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "clouddrive-private-db-subnet-1"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-private-db-subnet-1",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:subnet/subnet-0f0d300162eb23d3b",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1b",
+            "availability_zone_id": "aps1-az3",
+            "cidr_block": "10.0.21.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-0f0d300162eb23d3b",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": false,
+            "outpost_arn": "",
+            "owner_id": "160244693908",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "clouddrive-private-db-subnet-2"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-private-db-subnet-2",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_subnet",
+      "name": "public",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "index_key": 0,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:subnet/subnet-0995fa17d8accb622",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1a",
+            "availability_zone_id": "aps1-az1",
+            "cidr_block": "10.0.1.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-0995fa17d8accb622",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": true,
+            "outpost_arn": "",
+            "owner_id": "160244693908",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "clouddrive-public-subnet-1"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-public-subnet-1",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        },
+        {
+          "index_key": 1,
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:subnet/subnet-0e3f5d754e795dfe2",
+            "assign_ipv6_address_on_creation": false,
+            "availability_zone": "ap-south-1b",
+            "availability_zone_id": "aps1-az3",
+            "cidr_block": "10.0.2.0/24",
+            "customer_owned_ipv4_pool": "",
+            "enable_dns64": false,
+            "enable_lni_at_device_index": 0,
+            "enable_resource_name_dns_a_record_on_launch": false,
+            "enable_resource_name_dns_aaaa_record_on_launch": false,
+            "id": "subnet-0e3f5d754e795dfe2",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_association_id": "",
+            "ipv6_native": false,
+            "map_customer_owned_ip_on_launch": false,
+            "map_public_ip_on_launch": true,
+            "outpost_arn": "",
+            "owner_id": "160244693908",
+            "private_dns_hostname_type_on_launch": "ip-name",
+            "tags": {
+              "Name": "clouddrive-public-subnet-2"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-public-subnet-2",
+              "Project": "clouddrive"
+            },
+            "timeouts": null,
+            "vpc_id": "vpc-0de12d6ca3974c639"
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJlMmJmYjczMC1lY2FhLTExZTYtOGY4OC0zNDM2M2JjN2M0YzAiOnsiY3JlYXRlIjo2MDAwMDAwMDAwMDAsImRlbGV0ZSI6MTIwMDAwMDAwMDAwMH0sInNjaGVtYV92ZXJzaW9uIjoiMSJ9",
+          "dependencies": [
+            "aws_vpc.main",
+            "data.aws_availability_zones.available"
+          ]
+        }
+      ]
+    },
+    {
+      "mode": "managed",
+      "type": "aws_vpc",
+      "name": "main",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 1,
+          "attributes": {
+            "arn": "arn:aws:ec2:ap-south-1:160244693908:vpc/vpc-0de12d6ca3974c639",
+            "assign_generated_ipv6_cidr_block": false,
+            "cidr_block": "10.0.0.0/16",
+            "default_network_acl_id": "acl-0679d8533cdb1384a",
+            "default_route_table_id": "rtb-002881cad0ad8e183",
+            "default_security_group_id": "sg-015605e64e6b9e860",
+            "dhcp_options_id": "dopt-0099010b1474a593d",
+            "enable_dns_hostnames": true,
+            "enable_dns_support": true,
+            "enable_network_address_usage_metrics": false,
+            "id": "vpc-0de12d6ca3974c639",
+            "instance_tenancy": "default",
+            "ipv4_ipam_pool_id": null,
+            "ipv4_netmask_length": null,
+            "ipv6_association_id": "",
+            "ipv6_cidr_block": "",
+            "ipv6_cidr_block_network_border_group": "",
+            "ipv6_ipam_pool_id": "",
+            "ipv6_netmask_length": 0,
+            "main_route_table_id": "rtb-002881cad0ad8e183",
+            "owner_id": "160244693908",
+            "tags": {
+              "Name": "clouddrive-vpc"
+            },
+            "tags_all": {
+              "Environment": "production",
+              "ManagedBy": "Terraform",
+              "Name": "clouddrive-vpc",
+              "Project": "clouddrive"
+            }
+          },
+          "sensitive_attributes": [],
+          "identity_schema_version": 0,
+          "private": "eyJzY2hlbWFfdmVyc2lvbiI6IjEifQ==",
+          "create_before_destroy": true
+        }
+      ]
+    }
+  ],
+  "check_results": null
+}
