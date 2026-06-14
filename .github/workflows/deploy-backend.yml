@@ -1,0 +1,128 @@
+name: Deploy Backend
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'auth-frontend/**'
+      - '.github/workflows/deploy-frontend.yml'
+      - 'README.md'
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and Deploy Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # Configure AWS Credentials using GitHub OIDC
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::260543925645:role/clouddrive-github-deploy-role
+          aws-region: ap-south-1
+
+      # Log in to Amazon ECR
+      - name: Log in to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      # Build, Tag, and Push Backend Image to ECR
+      - name: Build and Push Docker Image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: clouddrive-backend
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
+            -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
+            -f Dockerfile \
+            .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:latest
+
+      # Update the image tag parameter in SSM
+      - name: Update SSM Parameter
+        run: |
+          aws ssm put-parameter \
+            --name "/clouddrive/backend/image_tag" \
+            --value "${{ github.sha }}" \
+            --type "String" \
+            --overwrite \
+            --region ap-south-1
+
+      # Create a new version of the Launch Template
+      - name: Create Launch Template Version
+        id: create-lt-version
+        run: |
+          # Fetch the Launch Template ID
+          LT_ID=$(aws ec2 describe-launch-templates \
+            --launch-template-names clouddrive-backend \
+            --query "LaunchTemplates[0].LaunchTemplateId" \
+            --output text \
+            --region ap-south-1)
+          
+          # Create new version referencing the commit SHA
+          aws ec2 create-launch-template-version \
+            --launch-template-id "$LT_ID" \
+            --source-version '$Latest' \
+            --version-description "Deploying git SHA ${{ github.sha }}" \
+            --region ap-south-1
+
+      # Get ASG Name (resolving prefix)
+      - name: Resolve ASG Name
+        id: resolve-asg
+        run: |
+          ASG_NAME=$(aws autoscaling describe-auto-scaling-groups \
+            --query "AutoScalingGroups[?starts_with(AutoScalingGroupName, 'clouddrive-backend-asg')].AutoScalingGroupName" \
+            --output text \
+            --region ap-south-1)
+          echo "ASG_NAME=$ASG_NAME" >> $GITHUB_ENV
+          echo "ASG Name is: $ASG_NAME"
+
+      # Trigger ASG Instance Refresh
+      - name: Trigger Instance Refresh
+        id: trigger-refresh
+        run: |
+          REFRESH_ID=$(aws autoscaling start-instance-refresh \
+            --auto-scaling-group-name "$ASG_NAME" \
+            --preferences '{"MinHealthyPercentage": 50, "InstanceWarmup": 300}' \
+            --query "InstanceRefreshId" \
+            --output text \
+            --region ap-south-1)
+          echo "REFRESH_ID=$REFRESH_ID" >> $GITHUB_ENV
+          echo "Triggered Instance Refresh. ID: $REFRESH_ID"
+
+      # Poll Instance Refresh Status
+      - name: Wait for Instance Refresh
+        run: |
+          echo "Monitoring Instance Refresh status..."
+          while true; do
+            STATUS_JSON=$(aws autoscaling describe-instance-refreshes \
+              --auto-scaling-group-name "$ASG_NAME" \
+              --instance-refresh-ids "$REFRESH_ID" \
+              --query "InstanceRefreshes[0]" \
+              --region ap-south-1)
+            
+            STATUS=$(echo "$STATUS_JSON" | jq -r '.Status')
+            PERCENT=$(echo "$STATUS_JSON" | jq -r '.PercentageComplete // 0')
+            
+            echo "Current Status: $STATUS ($PERCENT% complete)"
+            
+            if [ "$STATUS" = "Successful" ]; then
+              echo "Deployment completed successfully!"
+              break
+            elif [ "$STATUS" = "Failed" ] || [ "$STATUS" = "Cancelled" ] || [ "$STATUS" = "RollbackInProgress" ] || [ "$STATUS" = "RollbackFailed" ] || [ "$STATUS" = "RollbackSuccessful" ]; then
+              echo "Deployment failed with status: $STATUS"
+              exit 1
+            fi
+            
+            sleep 30
+          done

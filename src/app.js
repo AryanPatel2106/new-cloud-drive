@@ -35,7 +35,7 @@ app.use('/api/v1/files', fileRouter)
 
 
 
-
+/*
 // ----------------------------------
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -43,6 +43,8 @@ app.use(express.static(path.join(__dirname, '../auth-frontend/dist')));
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../auth-frontend/dist/index.html'));
 });
+*/
+
 
 
 export default app

@@ -1,9 +1,29 @@
-node_modules
-auth-frontend/node_modules
+# Ignore frontend directory
+auth-frontend/
 
-.git
-.gitignore
+# Ignore terraform directory
+terraform/
+terraform.tfstate*
+.terraform/
 
+# Ignore local files and environment files
 .env
-
+.env.*
+.git
+.github
+node_modules
 npm-debug.log
+website.zip
+
+# Ignore documentation
+README.md
+docs/
+
+# Ignore editor settings
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

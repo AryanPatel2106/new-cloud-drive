@@ -1,0 +1,12 @@
+node_modules
+dist
+.env
+.env.local
+.env.development
+.env.production
+.git
+.gitignore
+README.md
+Dockerfile
+nginx.conf
+npm-debug.log
