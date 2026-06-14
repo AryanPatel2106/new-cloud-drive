@@ -25,8 +25,9 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
-          role-to-assume: arn:aws:iam::260543925645:role/clouddrive-github-deploy-role
-          aws-region: ap-south-1
+          role-to-assume: ${{ secrets.AWS_ROLE_ARN }}
+          role-session-name: GitHubActions-Backend-${{ github.run_id }}
+          aws-region: ${{ secrets.AWS_REGION }}
 
       # Log in to Amazon ECR
       - name: Log in to Amazon ECR

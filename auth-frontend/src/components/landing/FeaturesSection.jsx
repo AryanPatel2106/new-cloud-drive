@@ -16,7 +16,7 @@ const features = [
       'Upload files up to 10 MB directly to AWS S3. Give each file a custom display name before storing.',
   },
   {
-    icon: FolderSearch,
+    icon: FolderSearc,
     color: 'green',
     title: 'Instant file search',
     description:
