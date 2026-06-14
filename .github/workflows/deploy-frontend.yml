@@ -61,23 +61,7 @@ jobs:
             --overwrite \
             --region ap-south-1
 
-      # Create a new version of the Launch Template
-      - name: Create Launch Template Version
-        id: create-lt-version
-        run: |
-          # Fetch the Launch Template ID
-          LT_ID=$(aws ec2 describe-launch-templates \
-            --launch-template-names clouddrive-frontend \
-            --query "LaunchTemplates[0].LaunchTemplateId" \
-            --output text \
-            --region ap-south-1)
-          
-          # Create new version referencing the commit SHA
-          aws ec2 create-launch-template-version \
-            --launch-template-id "$LT_ID" \
-            --source-version '$Latest' \
-            --version-description "Deploying git SHA ${{ github.sha }}" \
-            --region ap-south-1
+    
 
       # Get ASG Name (resolving prefix)
       - name: Resolve ASG Name
