@@ -20,7 +20,7 @@ resource "aws_instance" "bastion" {
 # -----------------------------------------------------------------------------
 
 resource "aws_launch_template" "frontend" {
-  name_prefix   = "${var.project_name}-frontend-lt-"
+  name          = "${var.project_name}-frontend"
   image_id      = data.aws_ami.amazon_linux_2.id
   instance_type = var.frontend_instance_type
   key_name      = var.key_name
@@ -43,7 +43,7 @@ resource "aws_launch_template" "frontend" {
   }))
 
   lifecycle {
-    create_before_destroy = true
+    ignore_changes = [name]
   }
 
   tag_specifications {
@@ -119,7 +119,7 @@ resource "aws_autoscaling_policy" "frontend_cpu" {
 # -----------------------------------------------------------------------------
 
 resource "aws_launch_template" "backend" {
-  name_prefix   = "${var.project_name}-backend-lt-"
+  name          = "${var.project_name}-backend"
   image_id      = data.aws_ami.amazon_linux_2.id
   instance_type = var.backend_instance_type
   key_name      = var.key_name
@@ -142,7 +142,7 @@ resource "aws_launch_template" "backend" {
   }))
 
   lifecycle {
-    create_before_destroy = true
+    ignore_changes = [name]
   }
 
   tag_specifications {
