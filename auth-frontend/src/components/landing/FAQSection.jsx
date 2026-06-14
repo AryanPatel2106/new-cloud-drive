@@ -11,8 +11,8 @@ const faqs = [
     a: 'Accounts require email OTP verification before login. Authentication uses HTTP-only JWT cookies, and file downloads use time-limited presigned URLs so your S3 bucket remains private.',
   },
   {
-    q: 'What is the maximum file upload size?',
-    a: 'Each file can be up to 10 MB. This limit helps ensure fast uploads and reliable performance for all users.',
+    q: 'What is the maximum file upload size ?',
+    a: 'Eac file can be up to 10 MB. This limit helps ensure fast uploads and reliable performance for all users.',
   },
   {
     q: 'Can I rename or delete files after uploading?',

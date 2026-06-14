@@ -1,2 +1,14 @@
 node_modules
 .env
+
+# Terraform artifacts
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+tfplan
+.terraform.lock.hcl
+
+# OS files
+.DS_Store
+Thumbs.db

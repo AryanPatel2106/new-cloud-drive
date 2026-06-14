@@ -79,17 +79,6 @@ resource "aws_route_table_association" "public" {
 # NAT Gateway / NAT Instance Configuration (Cost Optimization)
 # -----------------------------------------------------------------------------
 
-# Find a standard community/Amazon NAT AMI
-data "aws_ami" "nat_ami" {
-  most_recent = true
-  owners      = ["amazon"]
-
-  filter {
-    name   = "name"
-    values = ["amzn-ami-vpc-nat-hvm-*-x86_64-ebs"]
-  }
-}
-
 # Security Group for NAT Instance (if used)
 resource "aws_security_group" "nat" {
   count       = var.enable_cost_optimized_nat ? 1 : 0
@@ -118,14 +107,30 @@ resource "aws_security_group" "nat" {
   }
 }
 
-# Deploy a single NAT Instance (Cost Optimized)
+# Deploy a single NAT Instance (Cost Optimized) using Amazon Linux 2
 resource "aws_instance" "nat_instance" {
   count                  = var.enable_cost_optimized_nat ? 1 : 0
-  ami                    = data.aws_ami.nat_ami.id
+  ami                    = data.aws_ami.amazon_linux_2.id
   instance_type          = "t3.micro"
   subnet_id              = aws_subnet.public[0].id
   vpc_security_group_ids = [aws_security_group.nat[0].id]
   source_dest_check      = false # Required for NAT function
+
+  user_data = <<-EOF
+              #!/bin/bash
+              # Enable IP forwarding
+              echo 1 > /proc/sys/net/ipv4/ip_forward
+              echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.d/custom-ip-forward.conf
+              
+              # Configure iptables masquerade
+              PRIMARY_INTERFACE=$(ip route show | awk '/default/ {print $5}')
+              iptables -t nat -A POSTROUTING -o $PRIMARY_INTERFACE -j MASQUERADE
+              
+              # Persist rules
+              yum install iptables-services -y
+              systemctl enable iptables
+              service iptables save
+              EOF
 
   tags = {
     Name = "${var.project_name}-nat-instance"
@@ -168,15 +173,20 @@ resource "aws_route_table" "private" {
   }
 }
 
-# Routes for Private Subnets
-resource "aws_route" "private_nat" {
-  count                  = 2
+# Route for Private Subnets via NAT Instance (Cost-Optimized)
+resource "aws_route" "private_nat_instance" {
+  count                  = var.enable_cost_optimized_nat ? 2 : 0
   route_table_id         = aws_route_table.private[count.index].id
   destination_cidr_block = "0.0.0.0/0"
-  
-  # Point to NAT Instance or NAT Gateway depending on configuration
-  instance_id    = var.enable_cost_optimized_nat ? aws_instance.nat_instance[0].id : null
-  nat_gateway_id = var.enable_cost_optimized_nat ? null : aws_nat_gateway.nat[count.index].id
+  network_interface_id   = aws_instance.nat_instance[0].primary_network_interface_id
+}
+
+# Route for Private Subnets via NAT Gateways (Standard Multi-AZ)
+resource "aws_route" "private_nat_gateway" {
+  count                  = var.enable_cost_optimized_nat ? 0 : 2
+  route_table_id         = aws_route_table.private[count.index].id
+  destination_cidr_block = "0.0.0.0/0"
+  nat_gateway_id         = aws_nat_gateway.nat[count.index].id
 }
 
 resource "aws_route_table_association" "private_app" {
