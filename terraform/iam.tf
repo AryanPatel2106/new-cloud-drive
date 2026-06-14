@@ -162,23 +162,37 @@ resource "aws_iam_policy" "github_actions_policy" {
         ]
         Resource = "arn:aws:ssm:*:*:parameter/${var.project_name}/*"
       },
-      # Launch Template Access (to create new versions)
+      # Launch Template - Describe actions MUST use wildcard resource (AWS limitation)
       {
         Effect = "Allow"
         Action = [
-          "ec2:CreateLaunchTemplateVersion",
           "ec2:DescribeLaunchTemplates",
           "ec2:DescribeLaunchTemplateVersions"
         ]
-        Resource = "arn:aws:ec2:*:*:launch-template/*"
+        Resource = "*"
       },
-      # ASG Refresh and Describe
+      # Launch Template - Write actions can be scoped to project resources
       {
         Effect = "Allow"
         Action = [
-          "autoscaling:StartInstanceRefresh",
+          "ec2:CreateLaunchTemplateVersion"
+        ]
+        Resource = "arn:aws:ec2:*:*:launch-template/*"
+      },
+      # ASG - Describe actions MUST use wildcard resource (AWS limitation)
+      {
+        Effect = "Allow"
+        Action = [
           "autoscaling:DescribeInstanceRefreshes",
           "autoscaling:DescribeAutoScalingGroups"
+        ]
+        Resource = "*"
+      },
+      # ASG - Write actions can be scoped to project resources
+      {
+        Effect = "Allow"
+        Action = [
+          "autoscaling:StartInstanceRefresh"
         ]
         Resource = "arn:aws:autoscaling:*:*:autoScalingGroup:*:autoScalingGroupName/${var.project_name}-*"
       }
