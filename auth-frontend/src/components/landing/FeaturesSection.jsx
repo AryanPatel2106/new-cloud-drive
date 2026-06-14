@@ -11,7 +11,7 @@ const features = [
   {
     icon: Upload,
     color: 'blue',
-    title: 'Drag-and-drop uploads',
+    title: 'Drag-and-drop upload',
     description:
       'Upload files up to 10 MB directly to AWS S3. Give each file a custom display name before storing.',
   },
