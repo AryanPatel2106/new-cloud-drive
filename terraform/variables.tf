@@ -81,3 +81,10 @@ variable "key_name" {
   type        = string
   default     = null
 }
+
+variable "domain_name" {
+  description = "Custom domain name registered on Name.com"
+  type        = string
+  default     = "clouddrive.page"
+}
+

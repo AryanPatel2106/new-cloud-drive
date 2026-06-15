@@ -52,6 +52,19 @@ resource "aws_iam_policy" "ec2_policy" {
         ]
         Resource = "arn:aws:secretsmanager:*:*:secret:${var.project_name}/*"
       },
+      # S3 Access (for file storage)
+      {
+        Effect = "Allow"
+        Action = [
+          "s3:PutObject",
+          "s3:GetObject",
+          "s3:DeleteObject"
+        ]
+        Resource = [
+          aws_s3_bucket.storage.arn,
+          "${aws_s3_bucket.storage.arn}/*"
+        ]
+      },
       # CloudWatch Logs & Metrics
       {
         Effect = "Allow"

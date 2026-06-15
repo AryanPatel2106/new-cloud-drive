@@ -5,25 +5,28 @@ import dotenv from "dotenv";
 dotenv.config();
 
 function getS3Client() {
-  if (
-    !process.env.AWS_ACCESS_KEY_ID ||
-    !process.env.AWS_SECRET_ACCESS_KEY ||
-    !process.env.AWS_REGION ||
-    !process.env.AWS_S3_BUCKET
-  ) {
+  if (!process.env.AWS_REGION || !process.env.AWS_S3_BUCKET) {
     throw new Error(
-      "AWS S3 configuration is missing! Please make sure AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, and AWS_S3_BUCKET are defined in your .env file and restart your server."
+      "AWS S3 configuration is missing! Please make sure AWS_REGION and AWS_S3_BUCKET are defined and restart your server."
     );
   }
 
-  return new S3Client({
+  const s3Config = {
     region: process.env.AWS_REGION,
-    credentials: {
+  };
+
+  // If credentials are explicitly provided (e.g. in local development), use them.
+  // Otherwise, the SDK will automatically resolve credentials from the IAM Instance Profile.
+  if (process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY) {
+    s3Config.credentials = {
       accessKeyId: process.env.AWS_ACCESS_KEY_ID,
       secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-  });
+    };
+  }
+
+  return new S3Client(s3Config);
 }
+
 
 export async function uploadToS3(fileBuffer, originalName, mimeType){
     const fileKey = Date.now() + "-" + originalName;
