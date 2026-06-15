@@ -26,22 +26,20 @@ const sendEmail = async (options) => {
             link: "https://clouddrive.page"
         }
     })
+
+    const fromEmail = process.env.SES_FROM_EMAIL || "noreply@clouddrive.page"
     
     // Log configuration for debugging
     console.log("SES Configuration:", {
         region: process.env.AWS_REGION,
-        fromEmail: process.env.SES_FROM_EMAIL,
+        fromEmail,
         toEmail: options.email
     });
-    
-    if (!process.env.SES_FROM_EMAIL) {
-        throw new Error("SES_FROM_EMAIL environment variable is not set");
-    }
     
     const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent)
     const emailHtml = mailGenerator.generate(options.mailgenContent)
     const command = new SendEmailCommand({
-        Source: process.env.SES_FROM_EMAIL,
+        Source: fromEmail,
         Destination: {
             ToAddresses: [options.email]
         },

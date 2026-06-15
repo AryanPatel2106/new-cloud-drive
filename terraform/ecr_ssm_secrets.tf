@@ -119,7 +119,7 @@ resource "aws_secretsmanager_secret_version" "backend_placeholder" {
     ACCESS_TOKEN_SECRET  = "placeholder_long_jwt_secret_value_for_production"
     ACCESS_TOKEN_EXPIRY  = "1d"
     CORS_ORIGIN          = "http://localhost:5173" # Or your production domains
-    SES_FROM_EMAIL       = "aryanpatel8082@gmail.com"
+    SES_FROM_EMAIL       = "noreply@clouddrive.page"
     AWS_S3_BUCKET        = "${var.project_name}-s3-bucket-${data.aws_caller_identity.current.account_id}"
     AWS_REGION           = "ap-south-1"
   })
