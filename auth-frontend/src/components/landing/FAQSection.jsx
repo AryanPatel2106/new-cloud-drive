@@ -19,7 +19,7 @@ const faqs = [
     a: 'Yes. You can rename files from your dashboard at any time. Deleting a file removes it from your drive permanently to free up space.',
   },
   {
-    q: 'Is CloudDrive free to use?',
+    q: 'Is CloudDrive free to use ?',
     a: 'CloudDrive is a personal cloud storage platform. You can create a free account and start uploading files immediately.',
   },
 ];

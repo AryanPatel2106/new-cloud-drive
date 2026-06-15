@@ -1,5 +1,6 @@
 import Mailgen from "mailgen";
 import {SESClient, SendEmailCommand} from "@aws-sdk/client-ses"
+import { STSClient, GetCallerIdentityCommand } from "@aws-sdk/client-sts";
 import dotenv from "dotenv"
 
 dotenv.config();
@@ -7,6 +8,15 @@ dotenv.config();
 const sesClient = new SESClient({
     region: process.env.AWS_REGION
 })
+const sts = new STSClient({
+    region: process.env.AWS_REGION
+});
+
+const identity = await sts.send(
+    new GetCallerIdentityCommand({})
+);
+
+console.log("AWS Account:", identity.Account);
 
 const sendEmail = async (options) => {
     const mailGenerator = new Mailgen({
