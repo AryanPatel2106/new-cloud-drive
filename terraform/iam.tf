@@ -76,6 +76,14 @@ resource "aws_iam_policy" "ec2_policy" {
           "cloudwatch:PutMetricData"
         ]
         Resource = "*"
+      },
+      {
+        Effect = "Allow"
+        Action = [
+          "ses:SendEmail",
+          "ses:SendRawEmail"
+        ]
+        Resource = "*"
       }
     ]
   })
