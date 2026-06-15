@@ -240,7 +240,7 @@ const forgotPasswordRequest = asyncHandler(async (req, res) => {
             subject: "Password reset request",
             mailgenContent: forgotPasswordMailgenContent(
                 user.username,
-                `http://localhost:5000/reset-password/${unHashedToken}`
+                `${process.env.CLIENT_URL || "http://localhost:5173"}/reset-password/${unHashedToken}`
             )
         }
     )
