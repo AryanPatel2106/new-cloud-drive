@@ -1,8 +1,8 @@
 const stats = [
-  { value: '99.99%', label: 'S3 availability SLA' },
-  { value: '10 MB', label: 'Max upload per file' },
-  { value: '1 hr', label: 'Presigned link expiry' },
-  { value: '5 min', label: 'OTP verification window' },
+  { value: '99.99%', label: 'Uptime guarantee' },
+  { value: '10 MB', label: 'Max file size' },
+  { value: 'Encrypted', label: 'File sharing links' },
+  { value: 'Instant', label: 'Access & sync' },
 ];
 
 export default function StatsSection() {

@@ -15,7 +15,7 @@ export default function Register() {
 
   useSEO({
     title: 'Create Account',
-    description: 'Create a free CloudDrive account and get secure AWS S3 cloud storage with email-verified access.',
+    description: 'Create a free CloudDrive account and get secure, encrypted cloud storage with instant verified access.',
     path: '/register',
   });
 

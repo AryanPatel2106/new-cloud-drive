@@ -6,13 +6,13 @@ export default function HeroSection() {
     <section className="hero" aria-labelledby="hero-heading">
       <div className="container hero-grid">
         <div className="hero-content">
-          <span className="section-label">AWS S3 Powered Storage</span>
+          <span className="section-label">Secure Cloud Storage</span>
           <h1 id="hero-heading">
             Store, manage &amp; access your files — <span>anywhere, anytime</span>
           </h1>
           <p className="hero-lead">
-            CloudDrive is a secure personal cloud workspace. Upload documents, images, and media
-            to Amazon S3, organize them in seconds, and download with encrypted presigned links.
+            CloudDrive is a secure personal cloud workspace. Upload documents, images, and media, 
+            organize them in seconds, and download them with secure, encrypted links.
           </p>
           <div className="hero-actions">
             <Link to="/register" className="btn btn-primary btn-lg">
@@ -22,13 +22,13 @@ export default function HeroSection() {
           </div>
           <div className="hero-trust">
             <div className="trust-item">
-              <Shield size={16} aria-hidden="true" /> Email-verified accounts
+              <Shield size={16} aria-hidden="true" /> Verified accounts
             </div>
             <div className="trust-item">
-              <HardDrive size={16} aria-hidden="true" /> S3-backed file storage
+              <HardDrive size={16} aria-hidden="true" /> Encrypted file storage
             </div>
             <div className="trust-item">
-              <Clock size={16} aria-hidden="true" /> Presigned secure downloads
+              <Clock size={16} aria-hidden="true" /> High-speed secure downloads
             </div>
           </div>
         </div>
@@ -45,7 +45,7 @@ export default function HeroSection() {
             <Shield size={24} color="#22c55e" aria-hidden="true" />
             <div>
               <strong>256-bit encryption at rest</strong>
-              <span>Powered by AWS infrastructure</span>
+              <span>Secured backend infrastructure</span>
             </div>
           </div>
         </div>

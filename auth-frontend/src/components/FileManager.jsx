@@ -277,12 +277,12 @@ export default function FileManager() {
                   const IconComponent = getFileIcon(file.mimeType);
                   return (
                     <tr key={file._id}>
-                      <td>
+                      <td data-label="Type">
                         <span className="file-type-icon">
                           <IconComponent size={18} aria-hidden="true" />
                         </span>
                       </td>
-                      <td>
+                      <td data-label="Name">
                         {editingFileId === file._id ? (
                           <div className="inline-edit">
                             <input
@@ -321,9 +321,9 @@ export default function FileManager() {
                           </a>
                         )}
                       </td>
-                      <td>{formatBytes(file.size)}</td>
-                      <td>{formatDate(file.createdAt)}</td>
-                      <td>
+                      <td data-label="Size">{formatBytes(file.size)}</td>
+                      <td data-label="Uploaded">{formatDate(file.createdAt)}</td>
+                      <td data-label="Actions">
                         <div className="file-actions">
                           <button
                             type="button"

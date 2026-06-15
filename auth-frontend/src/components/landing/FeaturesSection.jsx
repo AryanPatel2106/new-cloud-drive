@@ -13,7 +13,7 @@ const features = [
     color: 'blue',
     title: 'Drag-and-drop upload',
     description:
-      'Upload files up to 10 MB directly to AWS S3. Give each file a custom display name before storing.',
+      'Upload files up to 10 MB in a single drop. Easily rename and customize display titles before saving.',
   },
   {
     icon: FolderSearch,
@@ -25,16 +25,16 @@ const features = [
   {
     icon: ShieldCheck,
     color: 'purple',
-    title: 'Secure presigned URLs',
+    title: 'Secure link sharing',
     description:
-      'Downloads use time-limited presigned links so your S3 bucket stays private and protected.',
+      'Each download link is encrypted and expires automatically, ensuring your personal links cannot be shared or hijacked.',
   },
   {
     icon: Mail,
     color: 'orange',
-    title: 'Email OTP verification',
+    title: 'Identity protection',
     description:
-      'Every account is verified with a one-time passcode sent to your inbox before you can sign in.',
+      'Enterprise-grade security using verified logins. Keep unauthorized users away with instant access-passcode validation.',
   },
   {
     icon: Download,
@@ -46,9 +46,9 @@ const features = [
   {
     icon: Trash2,
     color: 'rose',
-    title: 'Complete file lifecycle',
+    title: 'Complete file control',
     description:
-      'Rename, organize, and permanently delete files from both your dashboard and S3 storage.',
+      'Rename, organize, and permanently delete files to keep your workspace clutter-free.',
   },
 ];
 

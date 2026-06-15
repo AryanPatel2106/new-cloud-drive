@@ -4,23 +4,23 @@ import { ChevronDown } from 'lucide-react';
 const faqs = [
   {
     q: 'Where are my files stored?',
-    a: 'All files are stored in Amazon S3, a highly durable and scalable object storage service. Metadata such as file names and sizes is stored securely in MongoDB.',
+    a: 'All files are stored securely in high-availability, enterprise-grade cloud storage with multiple redundancy zones to protect against data loss.',
   },
   {
-    q: 'How ! secure is CloudDrive?',
-    a: 'Accounts require email OTP verification before login. Authentication uses HTTP-only JWT cookies, and file downloads use time-limited presigned URLs so your S3 bucket remains private.',
+    q: 'How secure is CloudDrive?',
+    a: 'Every login is protected by instant identity validation. All user sessions are encrypted, and file access links expire automatically to keep your drive secure.',
   },
   {
-    q: 'What is the maximum file upload siz ?',
-    a: 'Eac file ca be up to 10 MB. This limit helps ensure fast uploads and reliable performance for all users.',
+    q: 'What is the maximum file upload size?',
+    a: 'Each file can be up to 10 MB. This limit helps ensure fast uploads and reliable performance for all users.',
   },
   {
     q: 'Can I rename or delete files after uploading?',
-    a: 'Yes. You can rename files from your dashboard at any time. Deleting a file removes it from both your drive and S3 storage permanently.',
+    a: 'Yes. You can rename files from your dashboard at any time. Deleting a file removes it from your drive permanently to free up space.',
   },
   {
     q: 'Is CloudDrive free to use?',
-    a: 'CloudDrive is a personal project built for learning and demonstration. You can create a free account and start uploading files immediately.',
+    a: 'CloudDrive is a personal cloud storage platform. You can create a free account and start uploading files immediately.',
   },
 ];
 

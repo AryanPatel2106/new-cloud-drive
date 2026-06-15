@@ -15,7 +15,7 @@ function LandingPage() {
   useSEO({
     title: 'Secure Cloud Storage',
     description:
-      'CloudDrive is a secure personal cloud workspace with AWS S3 storage, email verification, and a modern file manager. Upload, organize, and download files from anywhere.',
+      'CloudDrive is a secure personal cloud workspace with encrypted cloud storage, verified login access, and a modern file manager. Upload, organize, and download files from anywhere.',
     path: '/',
   });
 

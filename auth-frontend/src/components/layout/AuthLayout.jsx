@@ -2,9 +2,9 @@ import { Shield, Zap, Lock } from 'lucide-react';
 import Logo from '../Logo';
 
 const highlights = [
-  { icon: Shield, text: 'Email-verified accounts with OTP security' },
-  { icon: Lock, text: 'Private files with presigned download URLs' },
-  { icon: Zap, text: 'Fast uploads directly to AWS S3 storage' },
+  { icon: Shield, text: 'Secure, verified access to keep your account protected' },
+  { icon: Lock, text: 'Every file link is encrypted and automatically expires' },
+  { icon: Zap, text: 'Fast uploads with instant access from any device' },
 ];
 
 export default function AuthLayout({ icon: Icon, title, subtitle, children, footer }) {

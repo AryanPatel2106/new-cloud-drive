@@ -27,8 +27,8 @@ export default function Footer() {
           <div className="footer-brand">
             <Logo />
             <p>
-              CloudDrive helps individuals and teams store, organize, and access files securely
-              with AWS S3-backed infrastructure and verified account protection.
+              CloudDrive helps individuals and teams store, organize, and access their files
+              securely from anywhere — with enterprise-grade protection built in.
             </p>
           </div>
 
@@ -52,7 +52,7 @@ export default function Footer() {
 
         <div className="footer-bottom">
           <span>&copy; {new Date().getFullYear()} CloudDrive. All rights reserved.</span>
-          <span>Built with AWS S3 · MongoDB · Node.js</span>
+          <span>Reliable · Secure · Always available</span>
         </div>
       </div>
     </footer>
