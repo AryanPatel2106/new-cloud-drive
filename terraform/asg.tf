@@ -34,6 +34,15 @@ resource "aws_launch_template" "frontend" {
     security_groups             = [aws_security_group.frontend_ec2.id]
   }
 
+  # Docker containers need hop limit >= 2 to reach the instance metadata service
+  # and resolve IAM role credentials for AWS SDK calls (SES, S3, etc.)
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
+    instance_metadata_tags      = "disabled"
+  }
+
   user_data = base64encode(templatefile("${path.module}/templates/user-data-frontend.sh", {
     aws_region          = var.aws_region
     project_name        = var.project_name
@@ -131,6 +140,15 @@ resource "aws_launch_template" "backend" {
   network_interfaces {
     associate_public_ip_address = false
     security_groups             = [aws_security_group.backend_ec2.id]
+  }
+
+  # Docker containers need hop limit >= 2 to reach the instance metadata service
+  # and resolve IAM role credentials for AWS SDK calls (SES, S3, etc.)
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_tokens                 = "required"
+    http_put_response_hop_limit = 2
+    instance_metadata_tags      = "disabled"
   }
 
   user_data = base64encode(templatefile("${path.module}/templates/user-data-backend.sh", {

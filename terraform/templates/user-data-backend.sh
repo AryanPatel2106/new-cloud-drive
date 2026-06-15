@@ -33,8 +33,19 @@ chmod 700 /opt/clouddrive
 aws secretsmanager get-secret-value --secret-id $SECRET_ID --region $REGION --query SecretString --output text | jq -r 'to_entries|map("\(.key)=\(.value)")|.[]' > /opt/clouddrive/backend.env
 chmod 600 /opt/clouddrive/backend.env
 
-# Append internal load balancer variables or extra configuration if needed
+# Inject EC2 IAM role credentials so the Docker container can call AWS APIs.
+# Bridge-networked containers cannot reach IMDS when hop limit is 1.
+ROLE_NAME=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" http://169.254.169.254/latest/meta-data/iam/security-credentials/)
+if [ -n "$ROLE_NAME" ] && [ "$ROLE_NAME" != "404 - Not Found" ]; then
+  CREDS=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" "http://169.254.169.254/latest/meta-data/iam/security-credentials/$${ROLE_NAME}")
+  echo "AWS_ACCESS_KEY_ID=$(echo "$CREDS" | jq -r '.AccessKeyId')" >> /opt/clouddrive/backend.env
+  echo "AWS_SECRET_ACCESS_KEY=$(echo "$CREDS" | jq -r '.SecretAccessKey')" >> /opt/clouddrive/backend.env
+  echo "AWS_SESSION_TOKEN=$(echo "$CREDS" | jq -r '.Token')" >> /opt/clouddrive/backend.env
+fi
+
+# Append runtime configuration
 echo "PORT=3000" >> /opt/clouddrive/backend.env
+echo "NODE_ENV=production" >> /opt/clouddrive/backend.env
 
 # Authenticate with AWS ECR
 aws ecr get-login-password --region $REGION | docker login --username AWS --password-stdin $ECR_REPO

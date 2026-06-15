@@ -118,10 +118,11 @@ resource "aws_secretsmanager_secret_version" "backend_placeholder" {
     MONGO_URI            = "mongodb+srv://clouddrive:Manvadind8962@cluster0.pdtpgzv.mongodb.net/clouddrive"
     ACCESS_TOKEN_SECRET  = "placeholder_long_jwt_secret_value_for_production"
     ACCESS_TOKEN_EXPIRY  = "1d"
-    CORS_ORIGIN          = "http://localhost:5173" # Or your production domains
-    SES_FROM_EMAIL       = "noreply@clouddrive.page"
+    CORS_ORIGIN          = "https://${var.domain_name},https://www.${var.domain_name}"
+    CLIENT_URL           = "https://${var.domain_name}"
+    SES_FROM_EMAIL       = "noreply@${var.domain_name}"
     AWS_S3_BUCKET        = "${var.project_name}-s3-bucket-${data.aws_caller_identity.current.account_id}"
-    AWS_REGION           = "ap-south-1"
+    AWS_REGION           = var.aws_region
   })
 
   lifecycle {

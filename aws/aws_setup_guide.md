@@ -93,7 +93,9 @@ Terraform creates a database configuration template in AWS Secrets Manager, but 
    - `MONGO_URI`: Set to your MongoDB Atlas connection string:
      `mongodb+srv://clouddrive:Manvadind8962@cluster0.pdtpgzv.mongodb.net/clouddrive`
    - `ACCESS_TOKEN_SECRET`: Set to a secure, long random string for JWT signatures.
-   - `SES_FROM_EMAIL`: Set to your verified AWS SES email address (`aryanpatel8082@gmail.com`).
+   - `SES_FROM_EMAIL`: Set to a verified sender (`noreply@clouddrive.page` or `aryanpatel8082@gmail.com`).
+   - `CLIENT_URL`: Set to `https://clouddrive.page` (used in password-reset email links).
+   - `CORS_ORIGIN`: Set to `https://clouddrive.page,https://www.clouddrive.page`.
 5. Save the secret. Any EC2 instances launched by the ASG will fetch these values on boot.
 
 ---
