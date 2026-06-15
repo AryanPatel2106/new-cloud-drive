@@ -26,6 +26,18 @@ const sendEmail = async (options) => {
             link: "https://clouddrive.page"
         }
     })
+    
+    // Log configuration for debugging
+    console.log("SES Configuration:", {
+        region: process.env.AWS_REGION,
+        fromEmail: process.env.SES_FROM_EMAIL,
+        toEmail: options.email
+    });
+    
+    if (!process.env.SES_FROM_EMAIL) {
+        throw new Error("SES_FROM_EMAIL environment variable is not set");
+    }
+    
     const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent)
     const emailHtml = mailGenerator.generate(options.mailgenContent)
     const command = new SendEmailCommand({
@@ -53,6 +65,7 @@ const sendEmail = async (options) => {
     } catch (error) {
         console.error("Email service failed. Check your AWS SES credentials and verified identities.")
         console.error("Error:", error);
+        throw error; // Re-throw so the caller knows it failed
     }
 }
 
